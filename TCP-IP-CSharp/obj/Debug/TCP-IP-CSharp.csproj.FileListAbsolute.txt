@@ -1,0 +1,7 @@
+D:\Desktop\TCP-IP-CSharp\TCP-IP-CSharp\TCP-IP-CSharp\bin\Debug\TCP-IP-CSharp.exe.config
+D:\Desktop\TCP-IP-CSharp\TCP-IP-CSharp\TCP-IP-CSharp\bin\Debug\TCP-IP-CSharp.exe
+D:\Desktop\TCP-IP-CSharp\TCP-IP-CSharp\TCP-IP-CSharp\bin\Debug\TCP-IP-CSharp.pdb
+D:\Desktop\TCP-IP-CSharp\TCP-IP-CSharp\TCP-IP-CSharp\obj\Debug\TCP-IP-CSharp.csprojAssemblyReference.cache
+D:\Desktop\TCP-IP-CSharp\TCP-IP-CSharp\TCP-IP-CSharp\obj\Debug\TCP-IP-CSharp.csproj.CoreCompileInputs.cache
+D:\Desktop\TCP-IP-CSharp\TCP-IP-CSharp\TCP-IP-CSharp\obj\Debug\TCP-IP-CSharp.exe
+D:\Desktop\TCP-IP-CSharp\TCP-IP-CSharp\TCP-IP-CSharp\obj\Debug\TCP-IP-CSharp.pdb
