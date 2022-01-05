@@ -178,7 +178,7 @@ namespace TCP_IP_CSharp
             string str = String.Format("MovLIO({0},{1},{2},{3},{4},{5}", x, y, z, a, b, c);
             for (int i = 0; i < moveIOEnums.Count; i++)
             {
-                str = str + String.Format(",{{0},{1},{2},{3}}", moveIOEnums[i].mode, moveIOEnums[i].distance, moveIOEnums[i].index, moveIOEnums[i].status);
+                str = str + String.Format(",{{{0},{1},{2},{3}}}", moveIOEnums[i].mode, moveIOEnums[i].distance, moveIOEnums[i].index, moveIOEnums[i].status);
             }
             str = str + ")";
             _socket.Send(Encoding.UTF8.GetBytes(str));
@@ -191,7 +191,7 @@ namespace TCP_IP_CSharp
             string str = String.Format("MovJIO({0},{1},{2},{3},{4},{5}", x, y, z, a, b, c);
             for (int i = 0; i < moveIOEnums.Count; i++)
             {
-                str = str + String.Format(",{{0},{1},{2},{3}}", moveIOEnums[i].mode, moveIOEnums[i].distance, moveIOEnums[i].index, moveIOEnums[i].status);
+                str = str + String.Format(",{{{0},{1},{2},{3}}}", moveIOEnums[i].mode, moveIOEnums[i].distance, moveIOEnums[i].index, moveIOEnums[i].status);
             }
             str = str + ")";
             _socket.Send(Encoding.UTF8.GetBytes(str));
