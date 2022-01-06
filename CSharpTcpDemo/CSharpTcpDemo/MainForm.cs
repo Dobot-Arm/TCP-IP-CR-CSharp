@@ -137,6 +137,9 @@ namespace CSharpTcpDemo
             this.btnMinusRZ.Tag = string.Format("Rz-");
             #endregion
 
+            //隐藏下电功能
+            this.btnPowerOff.Hide();
+
             //启动定时器
             mTimerReader.Elapsed += new System.Timers.ElapsedEventHandler(TimeoutEvent);
             mTimerReader.AutoReset = true;
@@ -305,6 +308,7 @@ namespace CSharpTcpDemo
 
         private void btnPowerOff_Click(object sender, EventArgs e)
         {
+            /*
             PrintLog("正在执行下电动作...");
             Thread thd = new Thread(() =>{
                 string strRet = mDashboard.PowerOff();
@@ -312,6 +316,7 @@ namespace CSharpTcpDemo
                 PrintLog("下电动作执行完毕!!!");
             });
             thd.Start();
+            */
         }
 
         private void btnEnable_Click(object sender, EventArgs e)
