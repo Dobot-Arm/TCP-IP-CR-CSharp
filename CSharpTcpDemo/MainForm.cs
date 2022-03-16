@@ -1,4 +1,6 @@
 ﻿using CSharpTcpDemo.com.dobot.api;
+using CSharpTcpDemo.com.dobot.api.com.dobot.api.bean;
+using CSharthiscpDemo.com.dobot.api;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,18 +22,17 @@ namespace CSharpTcpDemo
         private Dashboard mDashboard = new Dashboard();
 
         //定时获取数据并显示到UI
-        private System.Timers.Timer mTimerReader = new System.Timers.Timer(500);
+        private System.Timers.Timer mTimerReader = new System.Timers.Timer(300);
 
         public MainForm()
         {
             InitializeComponent();
 
             this.textBoxIP.Text = "192.168.5.1";
-
-            this.textBoxSpeed.Text = "10";
-
-            //默认显示joint
-            btnXYZR_Click(this, new EventArgs());
+            this.textBoxDashboardPort.Text = "29999";
+            this.textBoxMovePort.Text = "30003";
+            this.textBoxFeedbackPort.Text = "30004";
+            this.textBoxSpeedRatio.Text = "10";
 
             #region +按钮事件
             this.btnAdd1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMoveJogEvent);
@@ -137,42 +138,18 @@ namespace CSharpTcpDemo
             this.btnMinusRZ.Tag = string.Format("Rz-");
             #endregion
 
-            //隐藏下电功能
-            this.btnPowerOff.Hide();
-
             //启动定时器
             mTimerReader.Elapsed += new System.Timers.ElapsedEventHandler(TimeoutEvent);
             mTimerReader.AutoReset = true;
 
             //默认禁止窗口中的大部分控件
             DisableWindow();
+
+            string strPath = System.Windows.Forms.Application.StartupPath + "\\";
+            ErrorInfoHelper.AddJsonFromFile(strPath+ "alarm_controller.json", "Controller");
+            ErrorInfoHelper.AddJsonFromFile(strPath + "alarm_servo.json", "Servo");
         }
 
-        private void DisableWindow()
-        {
-            foreach (Control ctr in this.Controls)
-            {
-                if (ctr is Button)
-                {
-                    ctr.Enabled = false;
-                }
-                else if (ctr is Panel)
-                {
-                    ctr.Enabled = false;
-                }
-            }
-            this.btnConnect.Enabled = true; ;
-        }
-
-        private void EnableWindow()
-        {
-            foreach (Control ctr in this.Controls)
-            {
-                ctr.Enabled = true;
-            }
-            this.btnConnect.Enabled = false;
-        }
-    
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             mTimerReader.Close();
@@ -184,228 +161,84 @@ namespace CSharpTcpDemo
             {
                 this.mDashboard.Disconnect();
             }
-        }
-
-        private bool IsValidIP(string strIp)
-        {
-            try
+            if (this.mDobotMove != null)
             {
-                IPAddress.Parse(strIp);
+                this.mDobotMove.Disconnect();
             }
-            catch
-            {
-                return false;
-            }
-            return true;
         }
-
-        private void InsertMsgToRichBox(string str)
+        private void InsertLogToRichBox(RichTextBox box, string str)
         {
-            if (this.richBoxResult.GetLineFromCharIndex(this.richBoxResult.TextLength) > 500)
+            if (box.GetLineFromCharIndex(box.TextLength) > 100)
             {
-                this.richBoxResult.Text = str += "\r\n";
+                box.Text = (str += "\r\n");
             }
             else
             {
-                this.richBoxResult.Text += (str + "\r\n");
+                box.Text += (str + "\r\n");
             }
-            this.richBoxResult.Focus();
-            this.richBoxResult.Select(this.richBoxResult.TextLength, 0);
-            this.richBoxResult.ScrollToCaret();
+            box.Focus();
+            box.Select(box.TextLength, 0);
+            box.ScrollToCaret();
         }
-
         private void PrintLog(string str)
         {
             if (string.IsNullOrEmpty(str))
             {
                 return;
             }
-            if (this.richBoxResult.InvokeRequired)
+            if (this.richTextBoxLog.InvokeRequired)
             {
-                this.richBoxResult.Invoke(new Action<string>(log=> {
-                    InsertMsgToRichBox(log);
-                }),str);
+                this.richTextBoxLog.Invoke(new Action<string>(log => {
+                    InsertLogToRichBox(this.richTextBoxLog, log);
+                }), str);
             }
             else
             {
-                InsertMsgToRichBox(str);
+                InsertLogToRichBox(this.richTextBoxLog, str);
             }
         }
-
-        private void btnConnect_Click(object sender, EventArgs e)
+        private void PrintErrorInfo(string str)
         {
-            string strIp = textBoxIP.Text;
-            if (string.IsNullOrEmpty(strIp))
+            if (string.IsNullOrEmpty(str))
             {
-                MessageBox.Show("请输入IP地址");
                 return;
             }
-            if (!IsValidIP(strIp))
+            if (this.richTextBoxErrInfo.InvokeRequired)
             {
-                MessageBox.Show("IP地址输入格式不正确");
-                return;
+                this.richTextBoxErrInfo.Invoke(new Action<string>(log => {
+                    InsertLogToRichBox(this.richTextBoxErrInfo, log);
+                }), str);
             }
-
-            PrintLog("正在连接设备...");
-            Thread thd = new Thread(()=> {
-                if (!mFeedback.Connect(strIp))
-                {
-                    PrintLog(string.Format("连接 {0} 失败!!", strIp));
-                    return;
-                }
-                if (!mDobotMove.Connect(strIp))
-                {
-                    PrintLog(string.Format("连接 {0} 失败!!", strIp));
-                    return;
-                }
-                if (!mDashboard.Connect(strIp))
-                {
-                    PrintLog(string.Format("连接 {0} 失败!!", strIp));
-                    return;
-                }
-
-                mTimerReader.Start();
-
-                PrintLog("连接成功!!!");
-
-                this.Invoke(new Action(()=> {
-                    EnableWindow();
-                }));
-            });
-            thd.Start();
-        }
-
-        private void btnDisconnect_Click(object sender, EventArgs e)
-        {
-            PrintLog("正在断开...");
-            Thread thd = new Thread(()=>{
-                mFeedback.Disconnect();
-                mDobotMove.Disconnect();
-                mDashboard.Disconnect();
-                PrintLog("断开连接完成!!!");
-
-                mTimerReader.Stop();
-
-                this.Invoke(new Action(()=>{
-                    DisableWindow();
-                }));
-            });
-            thd.Start();
-        }
-
-        private void btnPowerOn_Click(object sender, EventArgs e)
-        {
-            PrintLog("正在执行上电动作...");
-            Thread thd = new Thread(() =>{
-                string strRet = mDashboard.ClearError();
-                PrintLog("ClearError: " + strRet);
-                strRet = mDashboard.PowerOn();
-                PrintLog("PowerOn: " + strRet);
-                PrintLog("上电执动作行完毕!!!");
-            });
-            thd.Start();
-        }
-
-        private void btnPowerOff_Click(object sender, EventArgs e)
-        {
-            /*
-            PrintLog("正在执行下电动作...");
-            Thread thd = new Thread(() =>{
-                string strRet = mDashboard.PowerOff();
-                PrintLog("PowerOff: " + strRet);
-                PrintLog("下电动作执行完毕!!!");
-            });
-            thd.Start();
-            */
-        }
-
-        private void btnEnable_Click(object sender, EventArgs e)
-        {
-            PrintLog("正在执行使能动作...");
-            Thread thd = new Thread(() =>{
-                string strRet = mDashboard.EnableRobot();
-                PrintLog("EnableRobot: " + strRet);
-                PrintLog("使能动作执行完毕!!!");
-            });
-            thd.Start();
-        }
-
-        private void btnDisable_Click(object sender, EventArgs e)
-        {
-            PrintLog("正在执行禁止动作...");
-            Thread thd = new Thread(() =>{
-                string strRet = mDashboard.DisableRobot();
-                PrintLog("DisableRobot: " + strRet);
-                PrintLog("禁止动作执行完毕!!!");
-            });
-            thd.Start();
-        }
-
-        private void btnClear_Click(object sender, EventArgs e)
-        {
-            PrintLog("正在执行清除错误动作...");
-            Thread thd = new Thread(() =>{
-                string strRet = mDashboard.ClearError();
-                PrintLog("ClearError: " + strRet);
-                PrintLog("清除错误动作执行完毕!!!");
-            });
-            thd.Start();
-        }
-
-        private void btnSetSpeed_Click(object sender, EventArgs e)
-        {
-            int iValue = 0;
-            try
+            else
             {
-                iValue = Int32.Parse(this.textBoxSpeed.Text);
+                InsertLogToRichBox(this.richTextBoxErrInfo, str);
             }
-            catch
+        }
+
+        private void DisableWindow()
+        {
+            foreach (Control ctr in this.Controls)
             {
+                if (ctr == this.groupBoxConnect)
+                {
+                    ctr.Enabled = true;
+                }
+                else if (ctr == this.groupBoxLog)
+                {
+                    ctr.Enabled = true;
+                }
+                else
+                {
+                    ctr.Enabled = false;
+                }
             }
-            PrintLog("正在设置速度比例...");
-            Thread thd = new Thread(() => {
-                string strRet = mDashboard.SpeedFactor(iValue);
-                PrintLog("SpeedFactor: " + strRet);
-                PrintLog("速度比例设置完毕!!!");
-            });
-            thd.Start();
         }
-
-        private void btnClearLog_Click(object sender, EventArgs e)
+        private void EnableWindow()
         {
-            this.richBoxResult.Clear();
-        }
-
-        private void DoMoveJog(string str)
-        {
-            PrintLog(string.Format("正在执行 {0} 动作...", str));
-            Thread thd = new Thread(() =>{
-                string ret = mDobotMove.MoveJog(str) ? "成功" : "失败";
-                PrintLog(string.Format("{0} 动作执行{1}", str, ret));
-            });
-            thd.Start();
-        }
-
-        private void DoStopMoveJog()
-        {
-            PrintLog(string.Format("正在下发停止动作..."));
-            Thread thd = new Thread(() =>{
-                string ret = mDobotMove.StopMoveJog() ? "成功" : "失败";
-                PrintLog(string.Format("下发停止动作执行{0}", ret));
-            });
-            thd.Start();
-        }
-
-        private void btnJoint_Click(object sender, EventArgs e)
-        {
-            this.panelJoint.Hide();
-            this.panelXYZR.Show();
-        }
-
-        private void btnXYZR_Click(object sender, EventArgs e)
-        {
-            this.panelJoint.Show();
-            this.panelXYZR.Hide();
+            foreach (Control ctr in this.Controls)
+            {
+                ctr.Enabled = true;
+            }
         }
 
         private void OnMoveJogEvent(object sender, MouseEventArgs e)
@@ -426,47 +259,26 @@ namespace CSharpTcpDemo
             }
         }
 
-        private void ShowJointData()
+        private void DoMoveJog(string str)
         {
-            this.labelNowSpeedFactor.Text = string.Format("当前速度比例：{0:F2}%", mFeedback.SpeedScaling);
-            this.labelRobotMode.Text = string.Format("机器人模式：{0}", mFeedback.ConvertRobotMode());
-
-            if (null != mFeedback.QActual && mFeedback.QActual.Length >= 6)
-            {
-                this.textBoxJt1.Text = string.Format("{0:F3}", mFeedback.QActual[0]);
-                this.textBoxJt2.Text = string.Format("{0:F3}", mFeedback.QActual[1]);
-                this.textBoxJt3.Text = string.Format("{0:F3}", mFeedback.QActual[2]);
-                this.textBoxJt4.Text = string.Format("{0:F3}", mFeedback.QActual[3]);
-                this.textBoxJt5.Text = string.Format("{0:F3}", mFeedback.QActual[4]);
-                this.textBoxJt6.Text = string.Format("{0:F3}", mFeedback.QActual[5]);
-            }
-        }
-        private void ShowXYZRData()
-        {
-            this.labelNowSpeedFactor.Text = string.Format("当前速度比例：{0:F2}%", mFeedback.SpeedScaling);
-            this.labelRobotMode.Text = string.Format("机器人模式：{0}", mFeedback.ConvertRobotMode());
-
-            if (null != mFeedback.ToolVectorActual && mFeedback.ToolVectorActual.Length >= 6)
-            {
-                this.textBoxX.Text = string.Format("{0:F3}", mFeedback.ToolVectorActual[0]);
-                this.textBoxY.Text = string.Format("{0:F3}", mFeedback.ToolVectorActual[1]);
-                this.textBoxZ.Text = string.Format("{0:F3}", mFeedback.ToolVectorActual[2]);
-                this.textBoxRX.Text = string.Format("{0:F3}", mFeedback.ToolVectorActual[3]);
-                this.textBoxRY.Text = string.Format("{0:F3}", mFeedback.ToolVectorActual[4]);
-                this.textBoxRZ.Text = string.Format("{0:F3}", mFeedback.ToolVectorActual[5]);
-            }
+            PrintLog(string.Format("send to {0}:{1}: MoveJog({2})", mDobotMove.IP,mDobotMove.Port,str));
+            Thread thd = new Thread(() => {
+                string ret = mDobotMove.MoveJog(str);
+                ParseResult(ret);
+                PrintLog(string.Format("Receive From {0}:{1}: {2}", mDobotMove.IP, mDobotMove.Port, ret));
+            });
+            thd.Start();
         }
 
-        private void ShowTextboxData()
+        private void DoStopMoveJog()
         {
-            if (this.panelJoint.Visible)
-            {
-                ShowJointData();
-            }
-            else
-            {
-                ShowXYZRData();
-            }
+            PrintLog(string.Format("send to {0}:{1}: MoveJog()", mDobotMove.IP, mDobotMove.Port));
+            Thread thd = new Thread(() => {
+                string ret = mDobotMove.StopMoveJog();
+                ParseResult(ret);
+                PrintLog(string.Format("Receive From {0}:{1}: {2}", mDobotMove.IP, mDobotMove.Port, ret));
+            });
+            thd.Start();
         }
         private void TimeoutEvent(object sender, System.Timers.ElapsedEventArgs e)
         {
@@ -475,17 +287,321 @@ namespace CSharpTcpDemo
                 return;
             }
             mFeedback.DataHasRead = false;
-
-            if (this.labelNowSpeedFactor.InvokeRequired)
+            if (this.labDI.InvokeRequired)
             {
-                this.labelNowSpeedFactor.Invoke(new Action(() =>{
-                    ShowTextboxData();
+                this.labDI.Invoke(new Action(() => {
+                    ShowDataResult();
                 }));
             }
             else
             {
-                ShowTextboxData();
+                ShowDataResult();
             }
+        }
+
+        private bool IsValidIP(string strIp)
+        {
+            try
+            {
+                IPAddress.Parse(strIp);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
+        private int Parse2Int(string str)
+        {
+            int iValue = 0;
+            try
+            {
+                iValue = int.Parse(str);
+            }
+            catch
+            {
+            }
+            return iValue;
+        }
+        private void btnConnect_Click(object sender, EventArgs e)
+        {
+            if (this.btnConnect.Text.Equals("Disconnect"))
+            {
+                Disconnect();
+                return;
+            }
+            Connect();
+        }
+
+        private void Connect()
+        {
+            string strIp = textBoxIP.Text;
+            if (!IsValidIP(strIp))
+            {
+                MessageBox.Show("IP Address Invalid");
+                return;
+            }
+            int iPortFeedback = Parse2Int(this.textBoxFeedbackPort.Text);
+            int iPortMove = Parse2Int(this.textBoxMovePort.Text);
+            int iPortDashboard = Parse2Int(this.textBoxDashboardPort.Text);
+
+            PrintLog("Connecting...");
+            Thread thd = new Thread(() => {
+                if (!mDashboard.Connect(strIp, iPortDashboard))
+                {
+                    PrintLog(string.Format("Connect {0}:{1} Fail!!", strIp, iPortDashboard));
+                    return;
+                }
+                if (!mDobotMove.Connect(strIp, iPortMove))
+                {
+                    PrintLog(string.Format("Connect {0}:{1} Fail!!", strIp, iPortMove));
+                    return;
+                }
+                if (!mFeedback.Connect(strIp, iPortFeedback))
+                {
+                    PrintLog(string.Format("Connect {0}:{1} Fail!!", strIp, iPortFeedback));
+                    return;
+                }
+
+                mTimerReader.Start();
+
+                PrintLog("Connect Success!!!");
+
+                this.Invoke(new Action(() => {
+                    EnableWindow();
+                    this.btnConnect.Text = "Disconnect";
+                }));
+            });
+            thd.Start();
+        }
+
+        private void Disconnect()
+        {
+            PrintLog("Disconnecting...");
+            Thread thd = new Thread(() => {
+                mFeedback.Disconnect();
+                mDobotMove.Disconnect();
+                mDashboard.Disconnect();
+                PrintLog("Disconnect success!!!");
+
+                mTimerReader.Stop();
+
+                this.Invoke(new Action(() => {
+                    DisableWindow();
+                    this.btnConnect.Text = "Connect";
+                }));
+            });
+            thd.Start();
+        }
+
+        private void btnEnable_Click(object sender, EventArgs e)
+        {
+            bool bEnable = this.btnEnable.Text.Equals("Enable");
+
+            PrintLog(string.Format("send to {0}:{1}: {2}()", mDashboard.IP, mDashboard.Port, bEnable? "EnableRobot" : "DisableRobot"));
+            Thread thd = new Thread(() => {
+                string ret = bEnable ? mDashboard.EnableRobot() : mDashboard.DisableRobot();
+                bool bOk = ParseResult(ret);
+
+                this.btnEnable.Invoke(new Action(() => {
+                    if (bOk)
+                    {
+                        this.btnEnable.Text = bEnable ? "Disable" : "Enable";
+                    }
+                }));
+
+                PrintLog(string.Format("Receive From {0}:{1}: {2}", mDashboard.IP, mDashboard.Port, ret));
+            });
+            thd.Start();
+        }
+
+        private void btnResetRobot_Click(object sender, EventArgs e)
+        {
+            PrintLog(string.Format("send to {0}:{1}: ResetRobot()", mDashboard.IP, mDashboard.Port));
+            Thread thd = new Thread(() => {
+                string ret = mDashboard.ResetRobot();
+                ParseResult(ret);
+                PrintLog(string.Format("Receive From {0}:{1}: {2}", mDashboard.IP, mDashboard.Port, ret));
+            });
+            thd.Start();
+        }
+
+        private void btnClearError_Click(object sender, EventArgs e)
+        {
+            PrintLog(string.Format("send to {0}:{1}: ClearError()", mDashboard.IP, mDashboard.Port));
+            Thread thd = new Thread(() => {
+                string ret = mDashboard.ClearError();
+                ParseResult(ret);
+                PrintLog(string.Format("Receive From {0}:{1}: {2}", mDashboard.IP, mDashboard.Port, ret));
+            });
+            thd.Start();
+        }
+
+        private void btnSpeedConfirm_Click(object sender, EventArgs e)
+        {
+            int iValue = Parse2Int(this.textBoxSpeedRatio.Text);
+            PrintLog(string.Format("send to {0}:{1}: SpeedFactor({1})", mDashboard.IP, mDashboard.Port, iValue));
+            Thread thd = new Thread(() => {
+                string ret = mDashboard.SpeedFactor(iValue);
+                ParseResult(ret);
+                PrintLog(string.Format("Receive From {0}:{1}: {2}", mDashboard.IP, mDashboard.Port, ret));
+            });
+            thd.Start();
+        }
+
+        private double Parse2Double(string str)
+        {
+            double value = 0.0;
+            try
+            {
+                value = Double.Parse(str);
+            }
+            catch { }
+            return value;
+        }
+        private void btnMovJ_Click(object sender, EventArgs e)
+        {
+            DescartesPoint pt = new DescartesPoint();
+            pt.x = Parse2Double(this.textBoxX.Text);
+            pt.y = Parse2Double(this.textBoxY.Text);
+            pt.z = Parse2Double(this.textBoxZ.Text);
+            pt.rx = Parse2Double(this.textBoxRx.Text);
+            pt.ry = Parse2Double(this.textBoxRy.Text);
+            pt.rz = Parse2Double(this.textBoxRz.Text);
+
+            PrintLog(string.Format("send to {0}:{1}: MovJ({2})", mDobotMove.IP, mDobotMove.Port,pt.ToString()));
+            Thread thd = new Thread(() => {
+                string ret = mDobotMove.MovJ(pt);
+                ParseResult(ret);
+                PrintLog(string.Format("Receive From {0}:{1}: {2}", mDobotMove.IP, mDobotMove.Port, ret));
+            });
+            thd.Start();
+        }
+
+        private void btnMovL_Click(object sender, EventArgs e)
+        {
+            DescartesPoint pt = new DescartesPoint();
+            pt.x = Parse2Double(this.textBoxX.Text);
+            pt.y = Parse2Double(this.textBoxY.Text);
+            pt.z = Parse2Double(this.textBoxZ.Text);
+            pt.rx = Parse2Double(this.textBoxRx.Text);
+            pt.ry = Parse2Double(this.textBoxRy.Text);
+            pt.rz = Parse2Double(this.textBoxRz.Text);
+
+            PrintLog(string.Format("send to {0}:{1}: MovL({2})", mDobotMove.IP, mDobotMove.Port, pt.ToString()));
+            Thread thd = new Thread(() => {
+                string ret = mDobotMove.MovL(pt);
+                ParseResult(ret);
+                PrintLog(string.Format("Receive From {0}:{1}: {2}", mDobotMove.IP, mDobotMove.Port, ret));
+            });
+            thd.Start();
+        }
+
+        private void btnJointMovJ_Click(object sender, EventArgs e)
+        {
+            JointPoint pt = new JointPoint();
+            pt.j1 = Parse2Double(this.textBoxJ1.Text);
+            pt.j2 = Parse2Double(this.textBoxJ2.Text);
+            pt.j3 = Parse2Double(this.textBoxJ3.Text);
+            pt.j4 = Parse2Double(this.textBoxJ4.Text);
+            pt.j5 = Parse2Double(this.textBoxJ5.Text);
+            pt.j6 = Parse2Double(this.textBoxJ6.Text);
+
+            PrintLog(string.Format("send to {0}:{1}: JointMovJ({2})", mDobotMove.IP, mDobotMove.Port, pt.ToString()));
+            Thread thd = new Thread(() => {
+                string ret = mDobotMove.JointMovJ(pt);
+                ParseResult(ret);
+                PrintLog(string.Format("Receive From {0}:{1}: {2}", mDobotMove.IP, mDobotMove.Port, ret));
+            });
+            thd.Start();
+        }
+
+        private void btnDOInput_Click(object sender, EventArgs e)
+        {
+            int idx = Parse2Int(this.textBoxIdx.Text);
+            bool bIsOn = string.Compare("on", this.cboStatus.Text, true) == 0;
+
+            PrintLog(string.Format("send to {0}:{1}: DigitalOutputs({2},{3})", mDashboard.IP, mDashboard.Port,
+                idx, bIsOn));
+            Thread thd = new Thread(() => {
+                string ret = mDashboard.DigitalOutputs(idx, bIsOn);
+                ParseResult(ret);
+                PrintLog(string.Format("Receive From {0}:{1}: {2}", mDashboard.IP, mDashboard.Port, ret));
+            });
+            thd.Start();
+        }
+
+        private bool ParseResult(string strResult)
+        {
+            //strResult=ErrorID,{id1,id2,...},funcName(param1,param2,...)
+            int iBegPos = strResult.IndexOf('{');
+            if (iBegPos < 0)
+            {
+                return false;
+            }
+            int iEndPos = strResult.IndexOf('}', iBegPos + 1);
+            if (iEndPos < 0)
+            {
+                return false;
+            }
+            bool bOk = strResult.StartsWith("0,");
+            strResult = strResult.Substring(iBegPos + 1, iEndPos - iBegPos - 1);
+            if (string.IsNullOrEmpty(strResult))
+            {
+                return bOk;
+            }
+            StringBuilder sb = new StringBuilder();
+            string[] all = strResult.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var d in all)
+            {
+                ErrorInfoBean bean = ErrorInfoHelper.Find(Parse2Int(d));
+                if (null != bean)
+                {
+                    sb.Append("ID:" + bean.id + "\r\n");
+                    sb.Append("Type:"+bean.Type + "\r\n");
+                    sb.Append("Level:"+bean.level + "\r\n");
+                    sb.Append("Solution:"+bean.en.solution + "\r\n");
+                }
+            }
+            if (sb.Length > 0)
+            {
+                DateTime dt = DateTime.Now;
+                string strTime = string.Format("Time Stamp:{0}.{1}.{2} {3}:{4}:{5}", dt.Year,
+                    dt.Month, dt.Day, dt.Hour, dt.Minute, dt.Second);
+
+
+                PrintErrorInfo(strTime + "\r\n" + sb.ToString());
+            }
+            return bOk;
+        }
+
+        private void ShowDataResult()
+        {
+            this.labCurrentSpeedRatio.Text = string.Format("Current Speed Ratio:{0:F2}%", mFeedback.SpeedScaling);
+            this.labRobotMode.Text = string.Format("Robot Mode:{0}", mFeedback.ConvertRobotMode());
+
+            if (null != mFeedback.QActual && mFeedback.QActual.Length >= 6)
+            {
+                this.labJ1.Text = string.Format("J1:{0:F3}", mFeedback.QActual[0]);
+                this.labJ2.Text = string.Format("J2:{0:F3}", mFeedback.QActual[1]);
+                this.labJ3.Text = string.Format("J3:{0:F3}", mFeedback.QActual[2]);
+                this.labJ4.Text = string.Format("J4:{0:F3}", mFeedback.QActual[3]);
+                this.labJ5.Text = string.Format("J5:{0:F3}", mFeedback.QActual[4]);
+                this.labJ6.Text = string.Format("J6:{0:F3}", mFeedback.QActual[5]);
+            }
+
+            if (null != mFeedback.ToolVectorActual && mFeedback.ToolVectorActual.Length >= 6)
+            {
+                this.labX.Text = string.Format("X:{0:F3}", mFeedback.ToolVectorActual[0]);
+                this.labY.Text = string.Format("Y:{0:F3}", mFeedback.ToolVectorActual[1]);
+                this.labZ.Text = string.Format("Z:{0:F3}", mFeedback.ToolVectorActual[2]);
+                this.labRx.Text = string.Format("Rx:{0:F3}", mFeedback.ToolVectorActual[3]);
+                this.labRy.Text = string.Format("Ry:{0:F3}", mFeedback.ToolVectorActual[4]);
+                this.labRz.Text = string.Format("Rz:{0:F3}", mFeedback.ToolVectorActual[5]);
+            }
+
+            this.labDI.Text = "Digital Inputs:" + Convert.ToString(mFeedback.DigitalInputs, 2).PadLeft(64, '0');
+            this.labDO.Text = "Digital Outputs:" + Convert.ToString(mFeedback.DigitalOutputs, 2).PadLeft(64, '0');
         }
     }
 }

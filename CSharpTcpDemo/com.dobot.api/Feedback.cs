@@ -15,92 +15,134 @@ namespace CSharpTcpDemo.com.dobot.api
         private Thread mThread;
 
         #region 数据包解析
-        public short MessageSize { get; private set; }
-        public short[] Reserved1 { get; private set;}
-        public long DigitalInputBits { get; private set;}
-        public long DigitalOutputs { get; private set;}
-        public long RobotMode { get; private set;}
-        public long ControllerTimer { get; private set;}
-        public long Time { get; private set;}
-        public long TestValue { get; private set;}
-        public long SafetyMode { get; private set;}
-        public double SpeedScaling { get; private set;}
-        public double LinearMomentumNorm { get; private set;}
-        public double VMain { get; private set;}
-        public double VRobot { get; private set;}
-        public double IRobot { get; private set;}
-        public double ProgramState { get; private set;}
-        public double SafetyStatus { get; private set;}
-        public double[] ToolAccelerometerValues { get; private set;}
-        public double[] ElbowPosition { get; private set;}
-        public double[] ElbowVelocity { get; private set;}
-        public double[] QTarget { get; private set;}
-        public double[] QdTarget { get; private set;}
-        public double[] QddTarget { get; private set;}
-        public double[] ITarget { get; private set;}
-        public double[] MTarget { get; private set;}
-        public double[] QActual { get; private set;}
-        public double[] QdActual { get; private set;}
-        public double[] IActual { get; private set;}
-        public double[] IControl { get; private set;}
-        public double[] ToolVectorActual { get; private set;}
-        public double[] TCPSpeedActual { get; private set;}
-        public double[] TCPForce { get; private set;}
-        public double[] ToolVectorTarget { get; private set;}
-        public double[] TCPSpeedTarget { get; private set;}
-        public double[] MotorTempetatures { get; private set;}
-        public double[] JointModes { get; private set;}
-        public double[] VActual { get; private set;}
-        public byte[] Handtype { get; private set;}
-        public byte User { get; private set;}
-        public byte Tool { get; private set;}
-        public byte RunQueuedCmd { get; private set;}
-        public byte PauseCmdFlag { get; private set;}
-        public byte VelocityRatio { get; private set;}
-        public byte AccelerationRatio { get; private set;}
-        public byte JerkRatio { get; private set;}
-        public byte XYZVelocityRatio { get; private set;}
-        public byte RVelocityRatio { get; private set;}
-        public byte XYZAccelerationRatio { get; private set;}
-        public byte RAccelerationRatio { get; private set;}
-        public byte XYZJerkRatio { get; private set;}
-        public byte RJerkRatio { get; private set;}
-        public byte[] Reserved2 { get; private set;}
-        public double[] Actual { get; private set;}
-        public double Load { get; private set;}
-        public double CenterX { get; private set;}
-        public double CenterY { get; private set;}
-        public double CenterZ { get; private set;}
-        public double[] UserValue { get; private set;}
-        public double[] Tools { get; private set;}
-        public byte[] Reserved3 { get; private set;}
+        public short MessageSize { get; private set; } //消息字节总长度
+
+        public short[] Reserved1 { get; private set; } //保留位
+
+        public long DigitalInputs { get; private set; } //数字输入
+        public long DigitalOutputs { get; private set; } //数字输出
+        public long RobotMode { get; private set; } //机器人模式
+        public long TimeStamp { get; private set; } //时间戳（单位ms）
+
+        public long Reserved2 { get; private set; } //保留位
+
+        public long TestValue { get; private set; } //内存结构测试标准值  0x0123 4567 89AB CDEF
+
+        public double Reserved3 { get; private set; } //保留位
+
+        public double SpeedScaling { get; private set; } //速度比例
+        public double LinearMomentumNorm { get; private set; } //机器人当前动量
+        public double VMain { get; private set; } //控制板电压
+        public double VRobot { get; private set; } //机器人电压
+        public double IRobot { get; private set; } //机器人电流
+
+        public double Reserved4 { get; private set; } //保留位
+        public double Reserved5 { get; private set; } //保留位
+
+        public double[] ToolAccelerometerValues { get; private set;} //TCP加速度
+        public double[] ElbowPosition { get; private set; } //肘位置
+        public double[] ElbowVelocity { get; private set; } //肘速度
+
+        public double[] QTarget { get; private set; } //目标关节位置
+        public double[] QdTarget { get; private set; } //目标关节速度
+        public double[] QddTarget { get; private set; } //目标关节加速度
+        public double[] ITarget { get; private set; } //目标关节加速度
+        public double[] MTarget { get; private set; } //目标关节电流
+        public double[] QActual { get; private set; } //实际关节位置
+        public double[] QdActual { get; private set; } //实际关节速度
+        public double[] IActual { get; private set; } //实际关节电流
+        public double[] IControl { get; private set; } //TCP传感器力值
+        public double[] ToolVectorActual { get; private set; } //TCP笛卡尔实际坐标值
+        public double[] TCPSpeedActual { get; private set; } //TCP笛卡尔实际速度值
+        public double[] TCPForce { get; private set; } //TCP力值
+        public double[] ToolVectorTarget { get; private set; } //TCP笛卡尔目标坐标值
+        public double[] TCPSpeedTarget { get; private set; } //TCP笛卡尔目标速度值
+        public double[] MotorTempetatures { get; private set; } //关节温度
+        public double[] JointModes { get; private set; } //关节控制模式
+        public double[] VActual { get; private set; } //关节电压
+
+        public byte[] Handtype { get; private set; } //手系
+        public byte User { get; private set; } //用户坐标
+        public byte Tool { get; private set; } //工具坐标
+        public byte RunQueuedCmd { get; private set; } //算法队列运行标志
+        public byte PauseCmdFlag { get; private set; } //算法队列暂停标志
+        public byte VelocityRatio { get; private set; } //关节速度比例(0~100)
+        public byte AccelerationRatio { get; private set; } //关节加速度比例(0~100)
+        public byte JerkRatio { get; private set; } //关节加加速度比例(0~100)
+        public byte XYZVelocityRatio { get; private set; } //笛卡尔位置速度比例(0~100)
+        public byte RVelocityRatio { get; private set; } //笛卡尔姿态速度比例(0~100)
+        public byte XYZAccelerationRatio { get; private set; } //笛卡尔位置加速度比例(0~100)
+        public byte RAccelerationRatio { get; private set; } //笛卡尔姿态加速度比例(0~100)
+        public byte XYZJerkRatio { get; private set; } //笛卡尔位置加加速度比例(0~100)
+        public byte RJerkRatio { get; private set; } //笛卡尔姿态加加速度比例(0~100)
+
+        public byte BrakeStatus { get; private set; } //机器人抱闸状态
+        public byte EnableStatus { get; private set; } //机器人使能状态
+        public byte DragStatus { get; private set; } //机器人拖拽状态
+        public byte RunningStatus { get; private set; } //机器人运行状态
+        public byte ErrorStatus { get; private set; } //机器人报警状态
+        public byte JogStatus { get; private set; } //机器人点动状态
+        public byte RobotType { get; private set; } //机器类型
+        public byte DragButtonSignal { get; private set; } //按钮板拖拽信号
+        public byte EnableButtonSignal { get; private set; } //按钮板使能信号
+        public byte RecordButtonSignal { get; private set; } //按钮板录制信号
+        public byte ReappearButtonSignal { get; private set; } //按钮板复现信号
+        public byte JawButtonSignal { get; private set; } //按钮板夹爪控制信号
+        public byte SixForceOnline { get; private set; } //六维力在线状态
+
+        public byte[] Reserved6 { get; private set; } //保留位
+
+        public double[] MActual { get; private set; } //实际扭矩
+
+        public double Load { get; private set; } //负载重量kg
+        public double CenterX { get; private set; } //X方向偏心距离mm
+        public double CenterY { get; private set; } //Y方向偏心距离mm
+        public double CenterZ { get; private set; } //Z方向偏心距离mm
+        public double[] UserValu { get; private set; } //用户坐标值
+        public double[] Tools { get; private set; } //工具坐标值
+        public double TraceIndex { get; private set; } //轨迹复现运行索引
+        public double[] SixForceValue { get; private set; } //当前六维力数据原始值
+        public double[] TargetQuaternion { get; private set; } //[qw,qx,qy,qz] 目标四元数
+        public double[] ActualQuaternion { get; private set; } //[qw,qx,qy,qz]  实际四元数
+
+        public byte[] Reserved7 { get; private set; } //保留位
 
         #endregion
-        
+
         public bool DataHasRead { get; set; }
+
+        public string IP { get; private set; }
+        public int Port { get; private set; }
 
         public Feedback()
         {
             #region 数据包解析
-            this.MessageSize = 0; //unsigned short
+            this.MessageSize = 0;
+
             this.Reserved1 = new short[3];
-            this.DigitalInputBits = 0;
+
+            this.DigitalInputs = 0;
             this.DigitalOutputs = 0;
             this.RobotMode = 0;
-            this.ControllerTimer = 0;
-            this.Time = 0;
+            this.TimeStamp = 0;
+
+            this.Reserved2 = 0;
             this.TestValue = 0;
-            this.SafetyMode = 0;
-            this.SpeedScaling = 0.0;
-            this.LinearMomentumNorm = 0.0;
-            this.VMain = 0.0;
-            this.VRobot = 0.0;
-            this.IRobot = 0.0;
-            this.ProgramState = 0.0;
-            this.SafetyStatus = 0.0;
+            this.Reserved3 = 0;
+
+            this.SpeedScaling = 0;
+            this.LinearMomentumNorm = 0;
+            this.VMain = 0;
+            this.VRobot = 0;
+            this.IRobot = 0;
+
+            this.Reserved4 = 0;
+            this.Reserved5 = 0;
+
             this.ToolAccelerometerValues = new double[3];
             this.ElbowPosition = new double[3];
             this.ElbowVelocity = new double[3];
+
             this.QTarget = new double[6];
             this.QdTarget = new double[6];
             this.QddTarget = new double[6];
@@ -118,6 +160,7 @@ namespace CSharpTcpDemo.com.dobot.api
             this.MotorTempetatures = new double[6];
             this.JointModes = new double[6];
             this.VActual = new double[6];
+
             this.Handtype = new byte[4];
             this.User = 0;
             this.Tool = 0;
@@ -132,25 +175,55 @@ namespace CSharpTcpDemo.com.dobot.api
             this.RAccelerationRatio = 0;
             this.XYZJerkRatio = 0;
             this.RJerkRatio = 0;
-            this.Reserved2 = new byte[95];
-            this.Actual = new double[6];
-            this.Load = 0.0;
-            this.CenterX = 0.0;
-            this.CenterY = 0.0;
-            this.CenterZ = 0.0;
-            this.UserValue = new double[6];
+
+            this.BrakeStatus = 0;
+            this.EnableStatus = 0;
+            this.DragStatus = 0;
+            this.RunningStatus = 0;
+            this.ErrorStatus = 0;
+            this.JogStatus = 0;
+            this.RobotType = 0;
+            this.DragButtonSignal = 0;
+            this.EnableButtonSignal = 0;
+            this.RecordButtonSignal = 0;
+            this.ReappearButtonSignal = 0;
+            this.JawButtonSignal = 0;
+            this.SixForceOnline = 0;
+
+            this.Reserved6 = new byte[82];
+
+            this.MActual = new double[6];
+            this.Load = 0;
+            this.CenterX = 0;
+            this.CenterY = 0;
+            this.CenterZ = 0;
+            this.UserValu = new double[6];
             this.Tools = new double[6];
-            this.Reserved3 = new byte[144];
+            this.TraceIndex = 0;
+            this.SixForceValue = new double[6];
+            this.TargetQuaternion = new double[4];
+            this.ActualQuaternion = new double[4];
+
+            this.Reserved7 = new byte[24];
             #endregion
         }
 
-        public bool Connect(string strIp)
+        /// <summary>
+        /// 连接设备
+        /// </summary>
+        /// <param name="strIp">设备地址</param>
+        /// <param name="iPort">指定端口</param>
+        /// <returns>true成功，false失败</returns>
+        public bool Connect(string strIp, int iPort)
         {
             bool bOk = false;
             try
             {
+                this.IP = strIp;
+                this.Port = iPort;
+
                 IPAddress addr = IPAddress.Parse(strIp);
-                IPEndPoint endpt = new IPEndPoint(addr, 30004);
+                IPEndPoint endpt = new IPEndPoint(addr, iPort);//30004
 
                 mSocketClient = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 mSocketClient.Connect(endpt);
@@ -170,6 +243,9 @@ namespace CSharpTcpDemo.com.dobot.api
             return bOk;
         }
 
+        /// <summary>
+        /// 断开连接
+        /// </summary>
         public void Disconnect()
         {
             if (mSocketClient.Connected)
@@ -198,40 +274,9 @@ namespace CSharpTcpDemo.com.dobot.api
             }
         }
 
-        /*****************************************
-        public bool MoveJog(string s)
-        {
-            string str;
-            if (string.IsNullOrEmpty(s))
-            {
-                str = "MoveJog()";
-            }
-            else
-            {
-                str = "MoveJog(" + s + ")";
-            }
-            return SendData(str);
-        }
-        public bool StopMoveJog()
-        {
-            return MoveJog(null);
-        }
-
-        private bool SendData(string str)
-        {
-            try
-            {
-                byte[] data = Encoding.UTF8.GetBytes(str);
-                return (mSocketClient.Send(data) == data.Length) ? true : false;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("send error:" + ex.ToString());
-            }
-            return false;
-        }
-        *******************************************************************/
-
+        /// <summary>
+        /// 接收返回的数据并解析处理
+        /// </summary>
         private void OnRecvData()
         {
             byte[] buffer = new byte[4320];//1440*3
@@ -286,9 +331,10 @@ namespace CSharpTcpDemo.com.dobot.api
                     {
                         continue;
                     }
-                    iHasRead = 0;
+                    iHasRead = iHasRead - 1440;
                     //按照协议的格式解析数据
                     ParseData(buffer);
+                    Array.Copy(buffer, 1440, buffer, 0, buffer.Length - 1440);
                 }
                 catch (Exception ex)
                 {
@@ -297,6 +343,10 @@ namespace CSharpTcpDemo.com.dobot.api
             }
         }
 
+        /// <summary>
+        /// 解析数据
+        /// </summary>
+        /// <param name="buffer">一包完整的数据</param>
         private void ParseData(byte[] buffer)
         {
             int iStartIndex = 0;
@@ -310,7 +360,7 @@ namespace CSharpTcpDemo.com.dobot.api
                 iStartIndex += 2;
             }
 
-            this.DigitalInputBits = BitConverter.ToInt64(buffer, iStartIndex);
+            this.DigitalInputs = BitConverter.ToInt64(buffer, iStartIndex);
             iStartIndex += 8;
 
             this.DigitalOutputs = BitConverter.ToInt64(buffer, iStartIndex);
@@ -319,16 +369,16 @@ namespace CSharpTcpDemo.com.dobot.api
             this.RobotMode = BitConverter.ToInt64(buffer, iStartIndex);
             iStartIndex += 8;
 
-            this.ControllerTimer = BitConverter.ToInt64(buffer, iStartIndex);
+            this.TimeStamp = BitConverter.ToInt64(buffer, iStartIndex);
             iStartIndex += 8;
 
-            this.Time = BitConverter.ToInt64(buffer, iStartIndex);
+            this.Reserved2 = BitConverter.ToInt64(buffer, iStartIndex);
             iStartIndex += 8;
 
             this.TestValue = BitConverter.ToInt64(buffer, iStartIndex);
             iStartIndex += 8;
 
-            this.SafetyMode = BitConverter.ToInt64(buffer, iStartIndex);
+            this.Reserved3 = BitConverter.ToInt64(buffer, iStartIndex);
             iStartIndex += 8;
 
             this.SpeedScaling = BitConverter.ToDouble(buffer, iStartIndex);
@@ -346,10 +396,10 @@ namespace CSharpTcpDemo.com.dobot.api
             this.IRobot = BitConverter.ToDouble(buffer, iStartIndex);
             iStartIndex += 8;
 
-            this.ProgramState = BitConverter.ToDouble(buffer, iStartIndex);
+            this.Reserved4 = BitConverter.ToDouble(buffer, iStartIndex);
             iStartIndex += 8;
 
-            this.SafetyStatus = BitConverter.ToDouble(buffer, iStartIndex);
+            this.Reserved5 = BitConverter.ToDouble(buffer, iStartIndex);
             iStartIndex += 8;
 
             for (int i = 0; i < this.ToolAccelerometerValues.Length; ++i)
@@ -517,15 +567,42 @@ namespace CSharpTcpDemo.com.dobot.api
             this.RJerkRatio = buffer[iStartIndex];
             iStartIndex += 1;
 
-            for (int i = 0; i < this.Reserved2.Length; ++i)
+            this.BrakeStatus = buffer[iStartIndex];
+            iStartIndex += 1;
+            this.EnableStatus = buffer[iStartIndex];
+            iStartIndex += 1;
+            this.DragStatus = buffer[iStartIndex];
+            iStartIndex += 1;
+            this.RunningStatus = buffer[iStartIndex];
+            iStartIndex += 1;
+            this.ErrorStatus = buffer[iStartIndex];
+            iStartIndex += 1;
+            this.JogStatus = buffer[iStartIndex];
+            iStartIndex += 1;
+            this.RobotType = buffer[iStartIndex];
+            iStartIndex += 1;
+            this.DragButtonSignal = buffer[iStartIndex];
+            iStartIndex += 1;
+            this.EnableButtonSignal = buffer[iStartIndex];
+            iStartIndex += 1;
+            this.RecordButtonSignal = buffer[iStartIndex];
+            iStartIndex += 1;
+            this.ReappearButtonSignal = buffer[iStartIndex];
+            iStartIndex += 1;
+            this.JawButtonSignal = buffer[iStartIndex];
+            iStartIndex += 1;
+            this.SixForceOnline = buffer[iStartIndex];
+            iStartIndex += 1;
+
+            for (int i = 0; i < this.Reserved6.Length; ++i)
             {
-                this.Reserved2[i] = buffer[iStartIndex];
+                this.Reserved6[i] = buffer[iStartIndex];
                 iStartIndex += 1;
             }
 
-            for (int i = 0; i < this.Actual.Length; ++i)
+            for (int i = 0; i < this.MActual.Length; ++i)
             {
-                this.Actual[i] = BitConverter.ToDouble(buffer, iStartIndex);
+                this.MActual[i] = BitConverter.ToDouble(buffer, iStartIndex);
                 iStartIndex += 8;
             }
 
@@ -541,9 +618,9 @@ namespace CSharpTcpDemo.com.dobot.api
             this.CenterZ = BitConverter.ToDouble(buffer, iStartIndex);
             iStartIndex += 8;
 
-            for (int i = 0; i < this.UserValue.Length; ++i)
+            for (int i = 0; i < this.UserValu.Length; ++i)
             {
-                this.UserValue[i] = BitConverter.ToDouble(buffer, iStartIndex);
+                this.UserValu[i] = BitConverter.ToDouble(buffer, iStartIndex);
                 iStartIndex += 8;
             }
 
@@ -553,9 +630,30 @@ namespace CSharpTcpDemo.com.dobot.api
                 iStartIndex += 8;
             }
 
-            for (int i = 0; i < this.Reserved3.Length; ++i)
+            this.TraceIndex = BitConverter.ToDouble(buffer, iStartIndex);
+            iStartIndex += 8;
+
+            for (int i = 0; i < this.SixForceValue.Length; ++i)
             {
-                this.Reserved3[i] = buffer[iStartIndex];
+                this.SixForceValue[i] = BitConverter.ToDouble(buffer, iStartIndex);
+                iStartIndex += 8;
+            }
+
+            for (int i = 0; i < this.TargetQuaternion.Length; ++i)
+            {
+                this.TargetQuaternion[i] = BitConverter.ToDouble(buffer, iStartIndex);
+                iStartIndex += 8;
+            }
+
+            for (int i = 0; i < this.ActualQuaternion.Length; ++i)
+            {
+                this.ActualQuaternion[i] = BitConverter.ToDouble(buffer, iStartIndex);
+                iStartIndex += 8;
+            }
+
+            for (int i = 0; i < this.Reserved7.Length; ++i)
+            {
+                this.Reserved7[i] = buffer[iStartIndex];
                 iStartIndex += 1;
             }
 
@@ -567,29 +665,33 @@ namespace CSharpTcpDemo.com.dobot.api
             switch (this.RobotMode)
             {
                 case -1:
-                    return "没有控制器";
+                    return "NO_CONTROLLER";
                 case 0:
-                    return "没有连接";
+                    return "NO_CONNECTED";
                 case 1:
-                    return "配置安全参数";
+                    return "ROBOT_MODE_INIT";
                 case 2:
-                    return "启动";
+                    return "ROBOT_MODE_BRAKE_OPEN";
                 case 3:
-                    return "下电";
+                    return "ROBOT_RESERVED";
                 case 4:
-                    return "上电";
+                    return "ROBOT_MODE_DISABLED";
                 case 5:
-                    return "空闲，可以进行操作机械臂";
+                    return "ROBOT_MODE_ENABLE";
                 case 6:
-                    return "拖拽示教模式";
+                    return "ROBOT_MODE_BACKDRIVE";
                 case 7:
-                    return "运行";
+                    return "ROBOT_MODE_RUNNING";
                 case 8:
-                    return "更新固件";
+                    return "ROBOT_MODE_RECORDING";
                 case 9:
-                    return "报警";
+                    return "ROBOT_MODE_ERROR";
+                case 10:
+                    return "ROBOT_MODE_PAUSE";
+                case 11:
+                    return "ROBOT_MODE_JOG";
             }
-            return string.Format("未知：RobotMode={0}", this.RobotMode);
+            return string.Format("UNKNOW：RobotMode={0}", this.RobotMode);
         }
     }
 }
