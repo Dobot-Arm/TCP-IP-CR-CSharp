@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CSharpTcpDemo.com.dobot.api.com.dobot.api.bean
+namespace CSharpTcpDemo.com.dobot.api
 {
     class ErrorInfoBean
     {

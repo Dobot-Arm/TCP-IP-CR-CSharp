@@ -52,12 +52,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="com.dobot.api\com.dobot.api.bean\ErrorInfoBean.cs" />
+    <Compile Include="com.dobot.api\ErrorInfoBean.cs" />
     <Compile Include="com.dobot.api\Dashboard.cs" />
     <Compile Include="com.dobot.api\DescartesPoint.cs" />
     <Compile Include="com.dobot.api\DobotMove.cs" />
     <Compile Include="com.dobot.api\ErrorInfoHelper.cs" />
     <Compile Include="com.dobot.api\Feedback.cs" />
+    <Compile Include="com.dobot.api\FeedbackData.cs" />
     <Compile Include="com.dobot.api\JointPoint.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>

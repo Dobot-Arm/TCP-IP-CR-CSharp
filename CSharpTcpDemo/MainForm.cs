@@ -1,16 +1,10 @@
 ﻿using CSharpTcpDemo.com.dobot.api;
-using CSharpTcpDemo.com.dobot.api.com.dobot.api.bean;
 using CSharthiscpDemo.com.dobot.api;
+using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CSharpTcpDemo
@@ -35,107 +29,39 @@ namespace CSharpTcpDemo
             this.textBoxSpeedRatio.Text = "10";
 
             #region +按钮事件
-            this.btnAdd1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMoveJogEvent);
-            this.btnAdd1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnStopMoveJogEvent);
-            this.btnAdd1.Tag = string.Format("J1+");
-
-            this.btnAdd2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMoveJogEvent);
-            this.btnAdd2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnStopMoveJogEvent);
-            this.btnAdd2.Tag = string.Format("J2+");
-
-            this.btnAdd3.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMoveJogEvent);
-            this.btnAdd3.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnStopMoveJogEvent);
-            this.btnAdd3.Tag = string.Format("J3+");
-
-            this.btnAdd4.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMoveJogEvent);
-            this.btnAdd4.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnStopMoveJogEvent);
-            this.btnAdd4.Tag = string.Format("J4+");
-
-            this.btnAdd5.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMoveJogEvent);
-            this.btnAdd5.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnStopMoveJogEvent);
-            this.btnAdd5.Tag = string.Format("J5+");
-
-            this.btnAdd6.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMoveJogEvent);
-            this.btnAdd6.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnStopMoveJogEvent);
-            this.btnAdd6.Tag = string.Format("J6+");
+            BindBtn_MoveEvent(this.btnAdd1, "J1+");
+            BindBtn_MoveEvent(this.btnAdd2, "J2+");
+            BindBtn_MoveEvent(this.btnAdd3, "J3+");
+            BindBtn_MoveEvent(this.btnAdd4, "J4+");
+            BindBtn_MoveEvent(this.btnAdd5, "J5+");
+            BindBtn_MoveEvent(this.btnAdd6, "J6+");
             #endregion
 
             #region -按钮事件
-            this.btnMinus1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMoveJogEvent);
-            this.btnMinus1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnStopMoveJogEvent);
-            this.btnMinus1.Tag = string.Format("J1-");
-
-            this.btnMinus2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMoveJogEvent);
-            this.btnMinus2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnStopMoveJogEvent);
-            this.btnMinus2.Tag = string.Format("J2-");
-
-            this.btnMinus3.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMoveJogEvent);
-            this.btnMinus3.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnStopMoveJogEvent);
-            this.btnMinus3.Tag = string.Format("J3-");
-
-            this.btnMinus4.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMoveJogEvent);
-            this.btnMinus4.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnStopMoveJogEvent);
-            this.btnMinus4.Tag = string.Format("J4-");
-
-            this.btnMinus5.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMoveJogEvent);
-            this.btnMinus5.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnStopMoveJogEvent);
-            this.btnMinus5.Tag = string.Format("J5-");
-
-            this.btnMinus6.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMoveJogEvent);
-            this.btnMinus6.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnStopMoveJogEvent);
-            this.btnMinus6.Tag = string.Format("J6-");
+            BindBtn_MoveEvent(this.btnMinus1, "J1-");
+            BindBtn_MoveEvent(this.btnMinus2, "J2-");
+            BindBtn_MoveEvent(this.btnMinus3, "J3-");
+            BindBtn_MoveEvent(this.btnMinus4, "J4-");
+            BindBtn_MoveEvent(this.btnMinus5, "J5-");
+            BindBtn_MoveEvent(this.btnMinus6, "J6-");
             #endregion
 
             #region XYZR+按钮事件
-            this.btnAddX.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMoveJogEvent);
-            this.btnAddX.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnStopMoveJogEvent);
-            this.btnAddX.Tag = string.Format("X+");
-
-            this.btnAddY.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMoveJogEvent);
-            this.btnAddY.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnStopMoveJogEvent);
-            this.btnAddY.Tag = string.Format("Y+");
-
-            this.btnAddZ.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMoveJogEvent);
-            this.btnAddZ.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnStopMoveJogEvent);
-            this.btnAddZ.Tag = string.Format("Z+");
-
-            this.btnAddRX.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMoveJogEvent);
-            this.btnAddRX.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnStopMoveJogEvent);
-            this.btnAddRX.Tag = string.Format("Rx+");
-
-            this.btnAddRY.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMoveJogEvent);
-            this.btnAddRY.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnStopMoveJogEvent);
-            this.btnAddRY.Tag = string.Format("Ry+");
-
-            this.btnAddRZ.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMoveJogEvent);
-            this.btnAddRZ.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnStopMoveJogEvent);
-            this.btnAddRZ.Tag = string.Format("Rz+");
+            BindBtn_MoveEvent(this.btnAddX, "X+");
+            BindBtn_MoveEvent(this.btnAddY, "Y+");
+            BindBtn_MoveEvent(this.btnAddZ, "Z+");
+            BindBtn_MoveEvent(this.btnAddRX, "Rx+");
+            BindBtn_MoveEvent(this.btnAddRY, "Ry+");
+            BindBtn_MoveEvent(this.btnAddRZ, "Rz+");
             #endregion
 
             #region XYZR-按钮事件
-            this.btnMinusX.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMoveJogEvent);
-            this.btnMinusX.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnStopMoveJogEvent);
-            this.btnMinusX.Tag = string.Format("X-");
-
-            this.btnMinusY.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMoveJogEvent);
-            this.btnMinusY.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnStopMoveJogEvent);
-            this.btnMinusY.Tag = string.Format("Y-");
-
-            this.btnMinusZ.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMoveJogEvent);
-            this.btnMinusZ.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnStopMoveJogEvent);
-            this.btnMinusZ.Tag = string.Format("Z-");
-
-            this.btnMinusRX.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMoveJogEvent);
-            this.btnMinusRX.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnStopMoveJogEvent);
-            this.btnMinusRX.Tag = string.Format("Rx-");
-
-            this.btnMinusRY.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMoveJogEvent);
-            this.btnMinusRY.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnStopMoveJogEvent);
-            this.btnMinusRY.Tag = string.Format("Ry-");
-
-            this.btnMinusRZ.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMoveJogEvent);
-            this.btnMinusRZ.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnStopMoveJogEvent);
-            this.btnMinusRZ.Tag = string.Format("Rz-");
+            BindBtn_MoveEvent(this.btnMinusX, "X-");
+            BindBtn_MoveEvent(this.btnMinusY, "Y-");
+            BindBtn_MoveEvent(this.btnMinusZ, "Z-");
+            BindBtn_MoveEvent(this.btnMinusRX, "Rx-");
+            BindBtn_MoveEvent(this.btnMinusRY, "Ry-");
+            BindBtn_MoveEvent(this.btnMinusRZ, "Rz-");
             #endregion
 
             //启动定时器
@@ -146,8 +72,15 @@ namespace CSharpTcpDemo
             DisableWindow();
 
             string strPath = System.Windows.Forms.Application.StartupPath + "\\";
-            ErrorInfoHelper.AddJsonFromFile(strPath+ "alarm_controller.json", "Controller");
-            ErrorInfoHelper.AddJsonFromFile(strPath + "alarm_servo.json", "Servo");
+            ErrorInfoHelper.ParseControllerJsonFile(strPath+ "alarm_controller.json");
+            ErrorInfoHelper.ParseServoJsonFile(strPath + "alarm_servo.json");
+        }
+
+        private void BindBtn_MoveEvent(Button btn, string strTag)
+        {
+            btn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMoveJogEvent);
+            btn.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnStopMoveJogEvent);
+            btn.Tag = strTag;
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -264,7 +197,6 @@ namespace CSharpTcpDemo
             PrintLog(string.Format("send to {0}:{1}: MoveJog({2})", mDobotMove.IP,mDobotMove.Port,str));
             Thread thd = new Thread(() => {
                 string ret = mDobotMove.MoveJog(str);
-                ParseResult(ret);
                 PrintLog(string.Format("Receive From {0}:{1}: {2}", mDobotMove.IP, mDobotMove.Port, ret));
             });
             thd.Start();
@@ -275,7 +207,6 @@ namespace CSharpTcpDemo
             PrintLog(string.Format("send to {0}:{1}: MoveJog()", mDobotMove.IP, mDobotMove.Port));
             Thread thd = new Thread(() => {
                 string ret = mDobotMove.StopMoveJog();
-                ParseResult(ret);
                 PrintLog(string.Format("Receive From {0}:{1}: {2}", mDobotMove.IP, mDobotMove.Port, ret));
             });
             thd.Start();
@@ -401,7 +332,7 @@ namespace CSharpTcpDemo
             PrintLog(string.Format("send to {0}:{1}: {2}()", mDashboard.IP, mDashboard.Port, bEnable? "EnableRobot" : "DisableRobot"));
             Thread thd = new Thread(() => {
                 string ret = bEnable ? mDashboard.EnableRobot() : mDashboard.DisableRobot();
-                bool bOk = ParseResult(ret);
+                bool bOk = ret.StartsWith("0");
 
                 this.btnEnable.Invoke(new Action(() => {
                     if (bOk)
@@ -420,7 +351,6 @@ namespace CSharpTcpDemo
             PrintLog(string.Format("send to {0}:{1}: ResetRobot()", mDashboard.IP, mDashboard.Port));
             Thread thd = new Thread(() => {
                 string ret = mDashboard.ResetRobot();
-                ParseResult(ret);
                 PrintLog(string.Format("Receive From {0}:{1}: {2}", mDashboard.IP, mDashboard.Port, ret));
             });
             thd.Start();
@@ -431,7 +361,6 @@ namespace CSharpTcpDemo
             PrintLog(string.Format("send to {0}:{1}: ClearError()", mDashboard.IP, mDashboard.Port));
             Thread thd = new Thread(() => {
                 string ret = mDashboard.ClearError();
-                ParseResult(ret);
                 PrintLog(string.Format("Receive From {0}:{1}: {2}", mDashboard.IP, mDashboard.Port, ret));
             });
             thd.Start();
@@ -443,7 +372,6 @@ namespace CSharpTcpDemo
             PrintLog(string.Format("send to {0}:{1}: SpeedFactor({1})", mDashboard.IP, mDashboard.Port, iValue));
             Thread thd = new Thread(() => {
                 string ret = mDashboard.SpeedFactor(iValue);
-                ParseResult(ret);
                 PrintLog(string.Format("Receive From {0}:{1}: {2}", mDashboard.IP, mDashboard.Port, ret));
             });
             thd.Start();
@@ -472,7 +400,6 @@ namespace CSharpTcpDemo
             PrintLog(string.Format("send to {0}:{1}: MovJ({2})", mDobotMove.IP, mDobotMove.Port,pt.ToString()));
             Thread thd = new Thread(() => {
                 string ret = mDobotMove.MovJ(pt);
-                ParseResult(ret);
                 PrintLog(string.Format("Receive From {0}:{1}: {2}", mDobotMove.IP, mDobotMove.Port, ret));
             });
             thd.Start();
@@ -491,7 +418,6 @@ namespace CSharpTcpDemo
             PrintLog(string.Format("send to {0}:{1}: MovL({2})", mDobotMove.IP, mDobotMove.Port, pt.ToString()));
             Thread thd = new Thread(() => {
                 string ret = mDobotMove.MovL(pt);
-                ParseResult(ret);
                 PrintLog(string.Format("Receive From {0}:{1}: {2}", mDobotMove.IP, mDobotMove.Port, ret));
             });
             thd.Start();
@@ -510,7 +436,6 @@ namespace CSharpTcpDemo
             PrintLog(string.Format("send to {0}:{1}: JointMovJ({2})", mDobotMove.IP, mDobotMove.Port, pt.ToString()));
             Thread thd = new Thread(() => {
                 string ret = mDobotMove.JointMovJ(pt);
-                ParseResult(ret);
                 PrintLog(string.Format("Receive From {0}:{1}: {2}", mDobotMove.IP, mDobotMove.Port, ret));
             });
             thd.Start();
@@ -525,83 +450,92 @@ namespace CSharpTcpDemo
                 idx, bIsOn));
             Thread thd = new Thread(() => {
                 string ret = mDashboard.DigitalOutputs(idx, bIsOn);
-                ParseResult(ret);
                 PrintLog(string.Format("Receive From {0}:{1}: {2}", mDashboard.IP, mDashboard.Port, ret));
             });
             thd.Start();
         }
 
-        private bool ParseResult(string strResult)
+        private void ShowDataResult()
         {
-            //strResult=ErrorID,{id1,id2,...},funcName(param1,param2,...)
+            this.labCurrentSpeedRatio.Text = string.Format("Current Speed Ratio:{0:F2}%", mFeedback.feedbackData.SpeedScaling);
+            this.labRobotMode.Text = string.Format("Robot Mode:{0}", mFeedback.ConvertRobotMode());
+
+            if (null != mFeedback.feedbackData.QActual && mFeedback.feedbackData.QActual.Length >= 6)
+            {
+                this.labJ1.Text = string.Format("J1:{0:F3}", mFeedback.feedbackData.QActual[0]);
+                this.labJ2.Text = string.Format("J2:{0:F3}", mFeedback.feedbackData.QActual[1]);
+                this.labJ3.Text = string.Format("J3:{0:F3}", mFeedback.feedbackData.QActual[2]);
+                this.labJ4.Text = string.Format("J4:{0:F3}", mFeedback.feedbackData.QActual[3]);
+                this.labJ5.Text = string.Format("J5:{0:F3}", mFeedback.feedbackData.QActual[4]);
+                this.labJ6.Text = string.Format("J6:{0:F3}", mFeedback.feedbackData.QActual[5]);
+            }
+
+            if (null != mFeedback.feedbackData.ToolVectorActual && mFeedback.feedbackData.ToolVectorActual.Length >= 6)
+            {
+                this.labX.Text = string.Format("X:{0:F3}", mFeedback.feedbackData.ToolVectorActual[0]);
+                this.labY.Text = string.Format("Y:{0:F3}", mFeedback.feedbackData.ToolVectorActual[1]);
+                this.labZ.Text = string.Format("Z:{0:F3}", mFeedback.feedbackData.ToolVectorActual[2]);
+                this.labRx.Text = string.Format("Rx:{0:F3}", mFeedback.feedbackData.ToolVectorActual[3]);
+                this.labRy.Text = string.Format("Ry:{0:F3}", mFeedback.feedbackData.ToolVectorActual[4]);
+                this.labRz.Text = string.Format("Rz:{0:F3}", mFeedback.feedbackData.ToolVectorActual[5]);
+            }
+
+            this.labDI.Text = "Digital Inputs:" + Convert.ToString(mFeedback.feedbackData.DigitalInputs, 2).PadLeft(64, '0');
+            this.labDO.Text = "Digital Outputs:" + Convert.ToString(mFeedback.feedbackData.DigitalOutputs, 2).PadLeft(64, '0');
+
+            ParseWarn();
+        }
+
+        private void ParseWarn()
+        {
+            if (this.mFeedback.feedbackData.RobotMode != 9) return;
+            string strResult = mDashboard.GetErrorID();
+            //strResult=ErrorID,{[[id,...,id], [id], [id], [id], [id], [id], [id]]},GetErrorID()
+            if (!strResult.StartsWith("0")) return;
+
+            //截取第一个{}内容
             int iBegPos = strResult.IndexOf('{');
-            if (iBegPos < 0)
-            {
-                return false;
-            }
+            if (iBegPos < 0) return;
             int iEndPos = strResult.IndexOf('}', iBegPos + 1);
-            if (iEndPos < 0)
-            {
-                return false;
-            }
-            bool bOk = strResult.StartsWith("0,");
+            if (iEndPos <= iBegPos) return;
             strResult = strResult.Substring(iBegPos + 1, iEndPos - iBegPos - 1);
-            if (string.IsNullOrEmpty(strResult))
-            {
-                return bOk;
-            }
+            if (string.IsNullOrEmpty(strResult)) return;
+
+            //剩余7组[]，第1组是控制器报警，其他6组是伺服报警
             StringBuilder sb = new StringBuilder();
-            string[] all = strResult.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (var d in all)
+            JArray arrWarn = JArray.Parse(strResult);
+            for (int i = 0; i < arrWarn.Count; ++i)
             {
-                ErrorInfoBean bean = ErrorInfoHelper.Find(Parse2Int(d));
-                if (null != bean)
+                JArray arr = arrWarn[i].ToObject<JArray>();
+                for (int j = 0; j < arr.Count; ++j)
                 {
-                    sb.Append("ID:" + bean.id + "\r\n");
-                    sb.Append("Type:"+bean.Type + "\r\n");
-                    sb.Append("Level:"+bean.level + "\r\n");
-                    sb.Append("Solution:"+bean.en.solution + "\r\n");
+                    ErrorInfoBean bean = null;
+                    if (0 == i)
+                    {//控制器报警
+                        bean = ErrorInfoHelper.FindController(arr[j].ToObject<int>());
+                    }
+                    else
+                    {//伺服报警
+                        bean = ErrorInfoHelper.FindServo(arr[j].ToObject<int>());
+                    }
+                    if (null != bean)
+                    {
+                        sb.Append("ID:" + bean.id + "\r\n");
+                        sb.Append("Type:" + bean.Type + "\r\n");
+                        sb.Append("Level:" + bean.level + "\r\n");
+                        sb.Append("Solution:" + bean.en.solution + "\r\n");
+                    }
                 }
             }
+
             if (sb.Length > 0)
             {
                 DateTime dt = DateTime.Now;
                 string strTime = string.Format("Time Stamp:{0}.{1}.{2} {3}:{4}:{5}", dt.Year,
                     dt.Month, dt.Day, dt.Hour, dt.Minute, dt.Second);
-
-
                 PrintErrorInfo(strTime + "\r\n" + sb.ToString());
             }
-            return bOk;
-        }
-
-        private void ShowDataResult()
-        {
-            this.labCurrentSpeedRatio.Text = string.Format("Current Speed Ratio:{0:F2}%", mFeedback.SpeedScaling);
-            this.labRobotMode.Text = string.Format("Robot Mode:{0}", mFeedback.ConvertRobotMode());
-
-            if (null != mFeedback.QActual && mFeedback.QActual.Length >= 6)
-            {
-                this.labJ1.Text = string.Format("J1:{0:F3}", mFeedback.QActual[0]);
-                this.labJ2.Text = string.Format("J2:{0:F3}", mFeedback.QActual[1]);
-                this.labJ3.Text = string.Format("J3:{0:F3}", mFeedback.QActual[2]);
-                this.labJ4.Text = string.Format("J4:{0:F3}", mFeedback.QActual[3]);
-                this.labJ5.Text = string.Format("J5:{0:F3}", mFeedback.QActual[4]);
-                this.labJ6.Text = string.Format("J6:{0:F3}", mFeedback.QActual[5]);
-            }
-
-            if (null != mFeedback.ToolVectorActual && mFeedback.ToolVectorActual.Length >= 6)
-            {
-                this.labX.Text = string.Format("X:{0:F3}", mFeedback.ToolVectorActual[0]);
-                this.labY.Text = string.Format("Y:{0:F3}", mFeedback.ToolVectorActual[1]);
-                this.labZ.Text = string.Format("Z:{0:F3}", mFeedback.ToolVectorActual[2]);
-                this.labRx.Text = string.Format("Rx:{0:F3}", mFeedback.ToolVectorActual[3]);
-                this.labRy.Text = string.Format("Ry:{0:F3}", mFeedback.ToolVectorActual[4]);
-                this.labRz.Text = string.Format("Rz:{0:F3}", mFeedback.ToolVectorActual[5]);
-            }
-
-            this.labDI.Text = "Digital Inputs:" + Convert.ToString(mFeedback.DigitalInputs, 2).PadLeft(64, '0');
-            this.labDO.Text = "Digital Outputs:" + Convert.ToString(mFeedback.DigitalOutputs, 2).PadLeft(64, '0');
+            return;
         }
     }
 }

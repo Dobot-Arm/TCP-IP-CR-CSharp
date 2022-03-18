@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using CSharpTcpDemo.com.dobot.api.com.dobot.api.bean;
 
 namespace CSharpTcpDemo.com.dobot.api
 {
     class ErrorInfoHelper
     {
-        private static Dictionary<int, ErrorInfoBean> mAllBeans = new Dictionary<int, ErrorInfoBean>();
-        public static void AddJsonFromFile(string strFullFile, string strType)
+        private static Dictionary<int, ErrorInfoBean> mControllerBeans = new Dictionary<int, ErrorInfoBean>();
+        private static Dictionary<int, ErrorInfoBean> mServoBeans = new Dictionary<int, ErrorInfoBean>();
+        public static void ParseControllerJsonFile(string strFullFile)
         {
             try
             {
@@ -19,8 +19,24 @@ namespace CSharpTcpDemo.com.dobot.api
                 List<ErrorInfoBean> result = JsonConvert.DeserializeObject<List<ErrorInfoBean>>(strJson);
                 foreach (var bean in result)
                 {
-                    bean.Type = strType;
-                    mAllBeans.Add(bean.id, bean);
+                    bean.Type = "Controller";
+                    mControllerBeans.Add(bean.id, bean);
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+        public static void ParseServoJsonFile(string strFullFile)
+        {
+            try
+            {
+                string strJson = System.IO.File.ReadAllText(strFullFile);
+                List<ErrorInfoBean> result = JsonConvert.DeserializeObject<List<ErrorInfoBean>>(strJson);
+                foreach (var bean in result)
+                {
+                    bean.Type = "Servo";
+                    mServoBeans.Add(bean.id, bean);
                 }
             }
             catch (Exception ex)
@@ -28,11 +44,19 @@ namespace CSharpTcpDemo.com.dobot.api
             }
         }
 
-        public static ErrorInfoBean Find(int id)
+        public static ErrorInfoBean FindController(int id)
         {
-            if (mAllBeans.ContainsKey(id))
+            if (mControllerBeans.ContainsKey(id))
             {
-                return mAllBeans[id];
+                return mControllerBeans[id];
+            }
+            return null;
+        }
+        public static ErrorInfoBean FindServo(int id)
+        {
+            if (mServoBeans.ContainsKey(id))
+            {
+                return mServoBeans[id];
             }
             return null;
         }

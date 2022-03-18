@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace CSharpTcpDemo.com.dobot.api
 {
@@ -238,6 +234,22 @@ namespace CSharpTcpDemo.com.dobot.api
             return WaitReply(5000);
         }
 
+        public string GetErrorID()
+        {
+            if (!mSocketClient.Connected)
+            {
+                return "device does not connected!!!";
+            }
+
+            string str = "GetErrorID()";
+            if (!SendData(str))
+            {
+                return str + ":send error";
+            }
+
+            return WaitReply(5000);
+        }
+
         /// <summary>
         /// 发送数据
         /// </summary>
@@ -279,7 +291,7 @@ namespace CSharpTcpDemo.com.dobot.api
             catch(Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("send error:" + ex.ToString());
-                return ex.Message;
+                return "send error:" + ex.Message;
             }
         }
     }
