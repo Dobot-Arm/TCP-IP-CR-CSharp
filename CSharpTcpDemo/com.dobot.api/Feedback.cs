@@ -9,76 +9,32 @@ using System.Threading.Tasks;
 
 namespace CSharpTcpDemo.com.dobot.api
 {
-    class Feedback
+    class Feedback : DobotClient
     {
-        private Socket mSocketClient = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         private Thread mThread;
 
         public FeedbackData feedbackData { get; private set; }
 
         public bool DataHasRead { get; set; }
 
-        public string IP { get; private set; }
-        public int Port { get; private set; }
-
         public Feedback()
         {
             feedbackData = new FeedbackData();
         }
 
-        /// <summary>
-        /// 连接设备
-        /// </summary>
-        /// <param name="strIp">设备地址</param>
-        /// <param name="iPort">指定端口</param>
-        /// <returns>true成功，false失败</returns>
-        public bool Connect(string strIp, int iPort)
+        protected override void OnConnected(Socket sock)
         {
-            bool bOk = false;
-            try
-            {
-                this.IP = strIp;
-                this.Port = iPort;
+            sock.SendTimeout = 5000;
+            sock.ReceiveTimeout = 15000;
 
-                IPAddress addr = IPAddress.Parse(strIp);
-                IPEndPoint endpt = new IPEndPoint(addr, iPort);//30004
-
-                mSocketClient = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                mSocketClient.Connect(endpt);
-                mSocketClient.SendTimeout = 5000;
-                mSocketClient.ReceiveTimeout = 15000;
-
-                mThread = new Thread(OnRecvData);
-                mThread.IsBackground = true;
-                mThread.Start();
-
-                bOk = true;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Connect failed:" + ex.ToString());
-            }
-            return bOk;
+            mThread = new Thread(OnRecvData);
+            mThread.IsBackground = true;
+            mThread.Start();
         }
 
-        /// <summary>
-        /// 断开连接
-        /// </summary>
-        public void Disconnect()
+        protected override void OnDisconnected()
         {
-            if (mSocketClient.Connected)
-            {
-                try
-                {
-                    mSocketClient.Shutdown(SocketShutdown.Both);
-                    mSocketClient.Close();
-                }
-                catch(Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine("close socket:" + ex.ToString());
-                }
-            }
-            if ( null!= mThread && mThread.IsAlive)
+            if (null != mThread && mThread.IsAlive)
             {
                 try
                 {
@@ -99,11 +55,11 @@ namespace CSharpTcpDemo.com.dobot.api
         {
             byte[] buffer = new byte[4320];//1440*3
             int iHasRead = 0;
-            while (mSocketClient.Connected)
+            while (IsConnected())
             {
                 try
                 {
-                    int iRet = mSocketClient.Receive(buffer, iHasRead, buffer.Length - iHasRead, SocketFlags.None);
+                    int iRet = Receive(buffer, iHasRead, buffer.Length - iHasRead, SocketFlags.None);
                     if (iRet <= 0)
                     {
                         continue;

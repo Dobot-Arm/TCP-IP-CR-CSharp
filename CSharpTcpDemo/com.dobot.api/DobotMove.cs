@@ -7,61 +7,16 @@ using System.Text.RegularExpressions;
 
 namespace CSharpTcpDemo.com.dobot.api
 {
-    class DobotMove
+    class DobotMove : DobotClient
     {
-        private Socket mSocketClient = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
-        public string IP { get; private set; }
-        public int Port { get; private set; }
-
-        /// <summary>
-        /// 连接设备
-        /// </summary>
-        /// <param name="strIp">设备地址</param>
-        /// <param name="iPort">指定端口</param>
-        /// <returns>true成功，false失败</returns>
-        public bool Connect(string strIp, int iPort)
+        protected override void OnConnected(Socket sock)
         {
-            bool bOk = false;
-            try
-            {
-                this.IP = strIp;
-                this.Port = iPort;
-
-                IPAddress addr = IPAddress.Parse(strIp);
-                IPEndPoint endpt = new IPEndPoint(addr, iPort); //30003
-
-                mSocketClient = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                mSocketClient.Connect(endpt);
-                mSocketClient.SendTimeout = 5000;
-                mSocketClient.ReceiveTimeout = 15000;
-
-                bOk = true;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Connect failed:" + ex.ToString());
-            }
-            return bOk;
+            sock.SendTimeout = 5000;
+            sock.ReceiveTimeout = 15000;
         }
 
-        /// <summary>
-        /// 断开连接
-        /// </summary>
-        public void Disconnect()
+        protected override void OnDisconnected()
         {
-            if (mSocketClient.Connected)
-            {
-                try
-                {
-                    mSocketClient.Shutdown(SocketShutdown.Both);
-                    mSocketClient.Close();
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine("close socket:" + ex.ToString());
-                }
-            }
         }
 
         /// <summary>
@@ -71,7 +26,7 @@ namespace CSharpTcpDemo.com.dobot.api
         /// <returns>返回执行结果的描述信息</returns>
         public string MoveJog(string s)
         {
-            if (!mSocketClient.Connected)
+            if (!IsConnected())
             {
                 return "device does not connected!!!";
             }
@@ -116,7 +71,7 @@ namespace CSharpTcpDemo.com.dobot.api
         /// <returns>返回执行结果的描述信息</returns>
         public string MovJ(DescartesPoint pt)
         {
-            if (!mSocketClient.Connected)
+            if (!IsConnected())
             {
                 return "device does not connected!!!";
             }
@@ -141,7 +96,7 @@ namespace CSharpTcpDemo.com.dobot.api
         /// <returns>返回执行结果的描述信息</returns>
         public string MovL(DescartesPoint pt)
         {
-            if (!mSocketClient.Connected)
+            if (!IsConnected())
             {
                 return "device does not connected!!!";
             }
@@ -165,7 +120,7 @@ namespace CSharpTcpDemo.com.dobot.api
         /// <returns>返回执行结果的描述信息</returns>
         public string JointMovJ(JointPoint pt)
         {
-            if (!mSocketClient.Connected)
+            if (!IsConnected())
             {
                 return "device does not connected!!!";
             }
@@ -180,51 +135,6 @@ namespace CSharpTcpDemo.com.dobot.api
             }
 
             return WaitReply(5000);
-        }
-
-        /// <summary>
-        /// 发送数据
-        /// </summary>
-        /// <param name="str">发送内容</param>
-        /// <returns>成功-true，失败-false</returns>
-        private bool SendData(string str)
-        {
-            try
-            {
-                byte[] data = Encoding.UTF8.GetBytes(str);
-                return (mSocketClient.Send(data) == data.Length) ? true : false;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("send error:" + ex.ToString());
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// 等待响应
-        /// </summary>
-        /// <param name="iTimeoutMillsecond">等待时间，毫秒单位</param>
-        /// <returns>返回响应的内容</returns>
-        private string WaitReply(int iTimeoutMillsecond)
-        {
-            try
-            {
-                if (iTimeoutMillsecond != mSocketClient.ReceiveTimeout)
-                {
-                    mSocketClient.ReceiveTimeout = iTimeoutMillsecond;
-                }
-                byte[] buffer = new byte[1024];
-                int length = mSocketClient.Receive(buffer);
-                string str = Encoding.UTF8.GetString(buffer, 0, length);
-
-                return str;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("send error:" + ex.ToString());
-                return ex.Message;
-            }
         }
     }
 }

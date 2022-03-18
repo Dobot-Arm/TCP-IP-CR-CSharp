@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="com.dobot.api\DobotClient.cs" />
     <Compile Include="com.dobot.api\ErrorInfoBean.cs" />
     <Compile Include="com.dobot.api\Dashboard.cs" />
     <Compile Include="com.dobot.api\DescartesPoint.cs" />
