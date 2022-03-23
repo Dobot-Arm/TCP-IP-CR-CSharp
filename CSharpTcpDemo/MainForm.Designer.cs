@@ -706,6 +706,7 @@
             this.btnClearErrorInfo.TabIndex = 4;
             this.btnClearErrorInfo.Text = "Clear";
             this.btnClearErrorInfo.UseVisualStyleBackColor = true;
+            this.btnClearErrorInfo.Click += new System.EventHandler(this.btnClearErrorInfo_Click);
             // 
             // btnAddRZ
             // 

@@ -455,6 +455,11 @@ namespace CSharpTcpDemo
             thd.Start();
         }
 
+        private void btnClearErrorInfo_Click(object sender, EventArgs e)
+        {
+            this.richTextBoxErrInfo.Clear();
+        }
+
         private void ShowDataResult()
         {
             this.labCurrentSpeedRatio.Text = string.Format("Current Speed Ratio:{0:F2}%", mFeedback.feedbackData.SpeedScaling);
