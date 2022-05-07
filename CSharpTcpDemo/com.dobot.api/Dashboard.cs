@@ -170,7 +170,7 @@ namespace CSharpTcpDemo.com.dobot.api
         /// <summary>
         /// 设置数字输出端口状态（队列指令）
         /// </summary>
-        /// <param name="index">数字输出索引，取值范围：1~16或100~1000</param>
+        /// <param name="index">数字输出索引</param>
         /// <param name="status">数字输出端口状态，true：高电平；false：低电平</param>
         /// <returns>返回执行结果的描述信息</returns>
         public string DigitalOutputs(int index, bool status)
@@ -181,6 +181,28 @@ namespace CSharpTcpDemo.com.dobot.api
             }
 
             string str = String.Format("DO({0},{1})", index, status ? 1 : 0);
+            if (!SendData(str))
+            {
+                return str + ":send error";
+            }
+
+            return WaitReply(5000);
+        }
+
+        /// <summary>
+        /// 设置末端数字输出端口状态（队列指令）
+        /// </summary>
+        /// <param name="index">数字输出索引</param>
+        /// <param name="status">数字输出端口状态，true：高电平；false：低电平</param>
+        /// <returns>返回执行结果的描述信息</returns>
+        public string ToolDO(int index, bool status)
+        {
+            if (!IsConnected())
+            {
+                return "device does not connected!!!";
+            }
+
+            string str = String.Format("ToolDO({0},{1})", index, status ? 1 : 0);
             if (!SendData(str))
             {
                 return str + ":send error";

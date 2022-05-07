@@ -263,56 +263,63 @@ namespace CSharpTcpDemo
         {
             if (this.btnConnect.Text.Equals("Disconnect"))
             {
+                mIsManualDisconnect = true;
                 Disconnect();
                 return;
             }
             Connect();
         }
 
+        private bool mIsManualDisconnect = false;
+        /// <summary>
+        /// 当发生网络错误时，触发该事件
+        /// </summary>
+        /// <param name="sender">发送错误的对象</param>
+        /// <param name="iErrCode">网络错误码</param>
         private void OnNetworkErrorEvent(DobotClient sender, SocketError iErrCode)
         {
+            if (mIsManualDisconnect) return;
             this.BeginInvoke(new Action(() => {
+                DisableWindow();
+
                 string strIp = textBoxIP.Text;
-                int iPort = 0;
-                if (sender is Dashboard)
-                {
-                    iPort = Parse2Int(this.textBoxDashboardPort.Text);
-                }
-                else if (sender is DobotMove)
-                {
-                    iPort = Parse2Int(this.textBoxMovePort.Text);
-                }
-                else if (sender is Feedback)
-                {
-                    iPort = Parse2Int(this.textBoxFeedbackPort.Text);
-                }
-                if (iPort > 0)
-                {
-                    PrintLog("Connecting...");
-                    Thread thd = new Thread(() => {
-                        sender.Disconnect();
-                        if (!sender.Connect(strIp, iPort))
-                        {
-                            PrintLog(string.Format("Connect {0}:{1} Fail!!", strIp, iPort));
-                        }
-                        else
-                        {
-                            PrintLog("Connect Success!!!");
-                        }
-                    });
-                    thd.Start();
-                }
+                int iPortFeedback = Parse2Int(this.textBoxFeedbackPort.Text);
+                int iPortMove = Parse2Int(this.textBoxMovePort.Text);
+                int iPortDashboard = Parse2Int(this.textBoxDashboardPort.Text);
+
+                PrintLog("retry connecting...");
+                Thread thd = new Thread(() => {
+                    mFeedback.Disconnect();
+                    mDobotMove.Disconnect();
+                    mDashboard.Disconnect();
+
+                    mTimerReader.Stop();
+
+                    if (!mDashboard.Connect(strIp, iPortDashboard) || 
+                        !mDobotMove.Connect(strIp, iPortMove) || 
+                        !mFeedback.Connect(strIp, iPortFeedback))
+                    {
+                        PrintLog("Connect Fail!!!");
+                        Thread.Sleep(500);
+                        OnNetworkErrorEvent(null, SocketError.SocketError);
+                        return;
+                    }
+
+                    mTimerReader.Start();
+
+                    PrintLog("Connect Success!!!");
+
+                    this.Invoke(new Action(() => {
+                        EnableWindow();
+                    }));
+                });
+                thd.Start();
             }));
         }
 
         private void Connect()
         {
             string strIp = textBoxIP.Text;
-            if (!IsValidIP(strIp))
-            {
-                MessageBox.Show("IP Address Invalid");
-                return;
-            }
             int iPortFeedback = Parse2Int(this.textBoxFeedbackPort.Text);
             int iPortMove = Parse2Int(this.textBoxMovePort.Text);
             int iPortDashboard = Parse2Int(this.textBoxDashboardPort.Text);
@@ -335,6 +342,7 @@ namespace CSharpTcpDemo
                     return;
                 }
 
+                mIsManualDisconnect = false;
                 mTimerReader.Start();
 
                 PrintLog("Connect Success!!!");
@@ -503,6 +511,20 @@ namespace CSharpTcpDemo
                 idx, bIsOn));
             Thread thd = new Thread(() => {
                 string ret = mDashboard.DigitalOutputs(idx, bIsOn);
+                PrintLog(string.Format("Receive From {0}:{1}: {2}", mDashboard.IP, mDashboard.Port, ret));
+            });
+            thd.Start();
+        }
+
+        private void btnDOInputIO_Click(object sender, EventArgs e)
+        {
+            int idx = Parse2Int(this.textBoxIdxIO.Text);
+            bool bIsOn = string.Compare("on", this.cboStatusIO.Text, true) == 0;
+
+            PrintLog(string.Format("send to {0}:{1}: ToolDO({2},{3})", mDashboard.IP, mDashboard.Port,
+                idx, bIsOn));
+            Thread thd = new Thread(() => {
+                string ret = mDashboard.ToolDO(idx, bIsOn);
                 PrintLog(string.Format("Receive From {0}:{1}: {2}", mDashboard.IP, mDashboard.Port, ret));
             });
             thd.Start();
