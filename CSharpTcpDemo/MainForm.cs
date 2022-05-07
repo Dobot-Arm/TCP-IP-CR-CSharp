@@ -3,6 +3,7 @@ using CSharthiscpDemo.com.dobot.api;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -27,6 +28,10 @@ namespace CSharpTcpDemo
             this.textBoxMovePort.Text = "30003";
             this.textBoxFeedbackPort.Text = "30004";
             this.textBoxSpeedRatio.Text = "10";
+
+            mFeedback.NetworkErrorEvent += new DobotClient.OnNetworkError(this.OnNetworkErrorEvent);
+            mDobotMove.NetworkErrorEvent += new DobotClient.OnNetworkError(this.OnNetworkErrorEvent);
+            mDashboard.NetworkErrorEvent += new DobotClient.OnNetworkError(this.OnNetworkErrorEvent);
 
             #region +按钮事件
             BindBtn_MoveEvent(this.btnAdd1, "J1+");
@@ -264,6 +269,42 @@ namespace CSharpTcpDemo
             Connect();
         }
 
+        private void OnNetworkErrorEvent(DobotClient sender, SocketError iErrCode)
+        {
+            this.BeginInvoke(new Action(() => {
+                string strIp = textBoxIP.Text;
+                int iPort = 0;
+                if (sender is Dashboard)
+                {
+                    iPort = Parse2Int(this.textBoxDashboardPort.Text);
+                }
+                else if (sender is DobotMove)
+                {
+                    iPort = Parse2Int(this.textBoxMovePort.Text);
+                }
+                else if (sender is Feedback)
+                {
+                    iPort = Parse2Int(this.textBoxFeedbackPort.Text);
+                }
+                if (iPort > 0)
+                {
+                    PrintLog("Connecting...");
+                    Thread thd = new Thread(() => {
+                        sender.Disconnect();
+                        if (!sender.Connect(strIp, iPort))
+                        {
+                            PrintLog(string.Format("Connect {0}:{1} Fail!!", strIp, iPort));
+                        }
+                        else
+                        {
+                            PrintLog("Connect Success!!!");
+                        }
+                    });
+                    thd.Start();
+                }
+            }));
+        }
+
         private void Connect()
         {
             string strIp = textBoxIP.Text;
@@ -399,6 +440,10 @@ namespace CSharpTcpDemo
 
             PrintLog(string.Format("send to {0}:{1}: MovJ({2})", mDobotMove.IP, mDobotMove.Port,pt.ToString()));
             Thread thd = new Thread(() => {
+                if (mFeedback.IsEnabled())
+                {
+                    mDashboard.EnableRobot();
+                }
                 string ret = mDobotMove.MovJ(pt);
                 PrintLog(string.Format("Receive From {0}:{1}: {2}", mDobotMove.IP, mDobotMove.Port, ret));
             });
@@ -417,6 +462,10 @@ namespace CSharpTcpDemo
 
             PrintLog(string.Format("send to {0}:{1}: MovL({2})", mDobotMove.IP, mDobotMove.Port, pt.ToString()));
             Thread thd = new Thread(() => {
+                if (mFeedback.IsEnabled())
+                {
+                    mDashboard.EnableRobot();
+                }
                 string ret = mDobotMove.MovL(pt);
                 PrintLog(string.Format("Receive From {0}:{1}: {2}", mDobotMove.IP, mDobotMove.Port, ret));
             });
@@ -435,6 +484,10 @@ namespace CSharpTcpDemo
 
             PrintLog(string.Format("send to {0}:{1}: JointMovJ({2})", mDobotMove.IP, mDobotMove.Port, pt.ToString()));
             Thread thd = new Thread(() => {
+                if (mFeedback.IsEnabled())
+                {
+                    mDashboard.EnableRobot();
+                }
                 string ret = mDobotMove.JointMovJ(pt);
                 PrintLog(string.Format("Receive From {0}:{1}: {2}", mDobotMove.IP, mDobotMove.Port, ret));
             });
@@ -493,7 +546,7 @@ namespace CSharpTcpDemo
 
         private void ParseWarn()
         {
-            if (this.mFeedback.feedbackData.RobotMode != 9) return;
+            if (this.mFeedback.feedbackData.RobotMode != FeedbackData.ROBOT_MODE_ERROR) return;
             string strResult = mDashboard.GetErrorID();
             //strResult=ErrorID,{[[id,...,id], [id], [id], [id], [id], [id], [id]]},GetErrorID()
             if (!strResult.StartsWith("0")) return;

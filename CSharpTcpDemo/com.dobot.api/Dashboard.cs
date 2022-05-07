@@ -16,6 +16,7 @@ namespace CSharpTcpDemo.com.dobot.api
         protected override void OnDisconnected()
         {
         }
+
         /// <summary>
         /// 复位，用于清除错误
         /// </summary>

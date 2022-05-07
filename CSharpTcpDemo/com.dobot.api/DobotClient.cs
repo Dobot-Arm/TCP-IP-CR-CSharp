@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 
 namespace CSharpTcpDemo.com.dobot.api
 {
@@ -14,6 +15,8 @@ namespace CSharpTcpDemo.com.dobot.api
 
         public string IP { get; private set; }
         public int Port { get; private set; }
+
+        private bool IsCloseByManaul = false;
 
         /// <summary>
         /// 连接设备
@@ -37,7 +40,17 @@ namespace CSharpTcpDemo.com.dobot.api
                 mSocketClient.SendTimeout = 5000;
                 mSocketClient.ReceiveTimeout = 5000;
 
+                mSocketClient.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
+                uint dummy = 0;
+                byte[] optVal = new byte[Marshal.SizeOf(dummy) * 3];
+                BitConverter.GetBytes((uint)1).CopyTo(optVal, 0);//是否启用Keep-Alive
+                BitConverter.GetBytes((uint)5000).CopyTo(optVal, Marshal.SizeOf(dummy));//第一次开始发送探测包时间间隔
+                BitConverter.GetBytes((uint)500).CopyTo(optVal, Marshal.SizeOf(dummy) * 2);//连续发送探测包时间间隔
+                mSocketClient.IOControl(IOControlCode.KeepAliveValues, optVal, null);
+
                 OnConnected(mSocketClient);
+
+                IsCloseByManaul = false;
 
                 bOk = true;
             }
@@ -53,19 +66,25 @@ namespace CSharpTcpDemo.com.dobot.api
         /// </summary>
         public void Disconnect()
         {
+            IsCloseByManaul = true;
             if (mSocketClient.Connected)
             {
-                try
-                {
-                    mSocketClient.Shutdown(SocketShutdown.Both);
-                    mSocketClient.Close();
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine("close socket:" + ex.ToString());
-                }
+                ForceCloseSocket();
             }
             OnDisconnected();
+        }
+
+        private void ForceCloseSocket()
+        {
+            try
+            {
+                mSocketClient.Shutdown(SocketShutdown.Both);
+                mSocketClient.Close();
+            }
+            catch(Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("close socket:" + ex.ToString());
+            }
         }
 
         public bool IsConnected()
@@ -83,6 +102,8 @@ namespace CSharpTcpDemo.com.dobot.api
         protected abstract void OnConnected(Socket sock);
         protected abstract void OnDisconnected();
 
+        public delegate void OnNetworkError(DobotClient sender, SocketError iErrCode);
+        public event OnNetworkError NetworkErrorEvent;
 
         /// <summary>
         /// 发送数据
@@ -95,6 +116,14 @@ namespace CSharpTcpDemo.com.dobot.api
             {
                 byte[] data = Encoding.UTF8.GetBytes(str);
                 return (mSocketClient.Send(data) == data.Length) ? true : false;
+            }
+            catch (SocketException ex)
+            {
+                ForceCloseSocket();
+                if (null != NetworkErrorEvent && !IsCloseByManaul)
+                {
+                    NetworkErrorEvent(this, ex.SocketErrorCode);
+                }
             }
             catch (Exception ex)
             {
@@ -122,6 +151,15 @@ namespace CSharpTcpDemo.com.dobot.api
 
                 return str;
             }
+            catch (SocketException ex)
+            {
+                ForceCloseSocket();
+                if (null != NetworkErrorEvent && !IsCloseByManaul)
+                {
+                    NetworkErrorEvent(this, ex.SocketErrorCode);
+                }
+                return "send error:" + ex.Message;
+            }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("send error:" + ex.ToString());
@@ -131,7 +169,32 @@ namespace CSharpTcpDemo.com.dobot.api
 
         protected int Receive(byte[] buffer, int offset, int size, SocketFlags flag)
         {
-            return mSocketClient.Receive(buffer, offset, size, flag);
+            int iRet = 0;
+            try
+            {
+                iRet = mSocketClient.Receive(buffer, offset, size, flag);
+                if (0 == iRet)
+                {
+                    ForceCloseSocket();
+                    if (null != NetworkErrorEvent && !IsCloseByManaul)
+                    {
+                        NetworkErrorEvent(this, SocketError.ConnectionAborted);
+                    }
+                }
+            }
+            catch (SocketException ex)
+            {
+                ForceCloseSocket();
+                if (null != NetworkErrorEvent && !IsCloseByManaul)
+                {
+                    NetworkErrorEvent(this, ex.SocketErrorCode);
+                }
+                return -1;
+            }
+            catch (Exception ex)
+            {
+            }
+            return iRet;
         }
     }
 }
