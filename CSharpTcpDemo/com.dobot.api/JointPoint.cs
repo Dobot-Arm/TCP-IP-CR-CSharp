@@ -38,6 +38,11 @@ namespace CSharpTcpDemo.com.dobot.api
         /// </summary>
         public double j6 { get; set; }
 
+        public JointPoint()
+        {
+            j1 = j2 = j3 = j4 = j5 = j6 = 0.0;
+        }
+
         override public string ToString()
         {
             string str = String.Format("{0},{1},{2},{3},{4},{5}",

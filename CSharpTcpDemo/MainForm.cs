@@ -29,9 +29,9 @@ namespace CSharpTcpDemo
             this.textBoxFeedbackPort.Text = "30004";
             this.textBoxSpeedRatio.Text = "10";
 
-            mFeedback.NetworkErrorEvent += new DobotClient.OnNetworkError(this.OnNetworkErrorEvent);
-            mDobotMove.NetworkErrorEvent += new DobotClient.OnNetworkError(this.OnNetworkErrorEvent);
-            mDashboard.NetworkErrorEvent += new DobotClient.OnNetworkError(this.OnNetworkErrorEvent);
+            mFeedback.NetworkErrorEvent += new DobotClient.OnNetworkError(this.OnNetworkErrorEvent_Feedback);
+            mDobotMove.NetworkErrorEvent += new DobotClient.OnNetworkError(this.OnNetworkErrorEvent_DobotMove);
+            mDashboard.NetworkErrorEvent += new DobotClient.OnNetworkError(this.OnNetworkErrorEvent_Dashboard);
 
             #region +按钮事件
             BindBtn_MoveEvent(this.btnAdd1, "J1+");
@@ -271,49 +271,63 @@ namespace CSharpTcpDemo
         }
 
         private bool mIsManualDisconnect = false;
+        private void DoNetworkErrorEvent(DobotClient sender, string strIp, int iPort)
+        {
+            DisableWindow();
+            PrintLog("retry connecting...");
+            Thread thd = new Thread(() => {
+                sender.Disconnect();
+
+                mTimerReader.Stop();
+
+                if (!sender.Connect(strIp, iPort))
+                {
+                    PrintLog("Connect Fail!!!");
+                    Thread.Sleep(500);
+                    DoNetworkErrorEvent(sender, strIp, iPort);
+                    return;
+                }
+
+                mTimerReader.Start();
+
+                PrintLog("Connect Success!!!");
+
+                this.Invoke(new Action(() => {
+                    EnableWindow();
+                }));
+            });
+            thd.Start();
+        }
         /// <summary>
         /// 当发生网络错误时，触发该事件
         /// </summary>
         /// <param name="sender">发送错误的对象</param>
         /// <param name="iErrCode">网络错误码</param>
-        private void OnNetworkErrorEvent(DobotClient sender, SocketError iErrCode)
+        private void OnNetworkErrorEvent_Feedback(DobotClient sender, SocketError iErrCode)
+        {
+            if (mIsManualDisconnect) return;
+            this.BeginInvoke(new Action(()=> {
+                string strIp = textBoxIP.Text;
+                int iPort = Parse2Int(this.textBoxFeedbackPort.Text);
+                DoNetworkErrorEvent(mFeedback, strIp, iPort);
+            }));
+        }
+        private void OnNetworkErrorEvent_DobotMove(DobotClient sender, SocketError iErrCode)
         {
             if (mIsManualDisconnect) return;
             this.BeginInvoke(new Action(() => {
-                DisableWindow();
-
                 string strIp = textBoxIP.Text;
-                int iPortFeedback = Parse2Int(this.textBoxFeedbackPort.Text);
-                int iPortMove = Parse2Int(this.textBoxMovePort.Text);
-                int iPortDashboard = Parse2Int(this.textBoxDashboardPort.Text);
-
-                PrintLog("retry connecting...");
-                Thread thd = new Thread(() => {
-                    mFeedback.Disconnect();
-                    mDobotMove.Disconnect();
-                    mDashboard.Disconnect();
-
-                    mTimerReader.Stop();
-
-                    if (!mDashboard.Connect(strIp, iPortDashboard) || 
-                        !mDobotMove.Connect(strIp, iPortMove) || 
-                        !mFeedback.Connect(strIp, iPortFeedback))
-                    {
-                        PrintLog("Connect Fail!!!");
-                        Thread.Sleep(500);
-                        OnNetworkErrorEvent(null, SocketError.SocketError);
-                        return;
-                    }
-
-                    mTimerReader.Start();
-
-                    PrintLog("Connect Success!!!");
-
-                    this.Invoke(new Action(() => {
-                        EnableWindow();
-                    }));
-                });
-                thd.Start();
+                int iPort = Parse2Int(this.textBoxMovePort.Text);
+                DoNetworkErrorEvent(mDobotMove, strIp, iPort);
+            }));
+        }
+        private void OnNetworkErrorEvent_Dashboard(DobotClient sender, SocketError iErrCode)
+        {
+            if (mIsManualDisconnect) return;
+            this.BeginInvoke(new Action(() => {
+                string strIp = textBoxIP.Text;
+                int iPort = Parse2Int(this.textBoxDashboardPort.Text);
+                DoNetworkErrorEvent(mDashboard, strIp, iPort);
             }));
         }
 

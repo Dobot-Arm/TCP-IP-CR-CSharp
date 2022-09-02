@@ -16,8 +16,6 @@ namespace CSharpTcpDemo.com.dobot.api
         public string IP { get; private set; }
         public int Port { get; private set; }
 
-        private bool IsCloseByManaul = false;
-
         /// <summary>
         /// 连接设备
         /// </summary>
@@ -25,6 +23,21 @@ namespace CSharpTcpDemo.com.dobot.api
         /// <param name="iPort">指定端口</param>
         /// <returns>true成功，false失败</returns>
         public bool Connect(string strIp, int iPort)
+        {
+            if (null != mSocketClient && IsConnected())
+            {
+                if (strIp != this.IP || iPort != this.Port)
+                {
+                    this.Disconnect();
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            return this.ConnectDobotServer(strIp, iPort);
+        }
+        private bool ConnectDobotServer(string strIp, int iPort)
         {
             bool bOk = false;
             try
@@ -37,8 +50,6 @@ namespace CSharpTcpDemo.com.dobot.api
 
                 mSocketClient = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 mSocketClient.Connect(endpt);
-                mSocketClient.SendTimeout = 5000;
-                mSocketClient.ReceiveTimeout = 5000;
 
                 mSocketClient.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
                 uint dummy = 0;
@@ -49,8 +60,6 @@ namespace CSharpTcpDemo.com.dobot.api
                 mSocketClient.IOControl(IOControlCode.KeepAliveValues, optVal, null);
 
                 OnConnected(mSocketClient);
-
-                IsCloseByManaul = false;
 
                 bOk = true;
             }
@@ -66,22 +75,12 @@ namespace CSharpTcpDemo.com.dobot.api
         /// </summary>
         public void Disconnect()
         {
-            IsCloseByManaul = true;
-            if (mSocketClient.Connected)
-            {
-                ForceCloseSocket();
-            }
-            OnDisconnected();
-        }
-
-        private void ForceCloseSocket()
-        {
             try
             {
                 mSocketClient.Shutdown(SocketShutdown.Both);
                 mSocketClient.Close();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("close socket:" + ex.ToString());
             }
@@ -95,6 +94,7 @@ namespace CSharpTcpDemo.com.dobot.api
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
             }
             return false;
         }
@@ -119,9 +119,8 @@ namespace CSharpTcpDemo.com.dobot.api
             }
             catch (SocketException ex)
             {
-                ForceCloseSocket();
-                if (null != NetworkErrorEvent && !IsCloseByManaul)
-                {
+                if (null != NetworkErrorEvent && !IsConnected())
+                {//发送抛异常，并且连接真的断开了，则触发这个事件
                     NetworkErrorEvent(this, ex.SocketErrorCode);
                 }
             }
@@ -153,9 +152,8 @@ namespace CSharpTcpDemo.com.dobot.api
             }
             catch (SocketException ex)
             {
-                ForceCloseSocket();
-                if (null != NetworkErrorEvent && !IsCloseByManaul)
-                {
+                if (null != NetworkErrorEvent && !IsConnected())
+                {//发送抛异常，并且连接真的断开了，则触发这个事件
                     NetworkErrorEvent(this, ex.SocketErrorCode);
                 }
                 return "send error:" + ex.Message;
@@ -175,8 +173,7 @@ namespace CSharpTcpDemo.com.dobot.api
                 iRet = mSocketClient.Receive(buffer, offset, size, flag);
                 if (0 == iRet)
                 {
-                    ForceCloseSocket();
-                    if (null != NetworkErrorEvent && !IsCloseByManaul)
+                    if (null != NetworkErrorEvent && !IsConnected())
                     {
                         NetworkErrorEvent(this, SocketError.ConnectionAborted);
                     }
@@ -184,8 +181,7 @@ namespace CSharpTcpDemo.com.dobot.api
             }
             catch (SocketException ex)
             {
-                ForceCloseSocket();
-                if (null != NetworkErrorEvent && !IsCloseByManaul)
+                if (null != NetworkErrorEvent && !IsConnected())
                 {
                     NetworkErrorEvent(this, ex.SocketErrorCode);
                 }
@@ -193,6 +189,7 @@ namespace CSharpTcpDemo.com.dobot.api
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine("Receive error:" + ex.ToString());
             }
             return iRet;
         }

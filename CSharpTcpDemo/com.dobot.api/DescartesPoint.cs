@@ -34,6 +34,11 @@ namespace CSharthiscpDemo.com.dobot.api
         /// </summary>
         public double rz { get; set; }
 
+        public DescartesPoint()
+        {
+            x = y = z = rx = ry = rz = 0.0;
+        }
+
         override public string ToString()
         {
             string str = String.Format("{0},{1},{2},{3},{4},{5}", 

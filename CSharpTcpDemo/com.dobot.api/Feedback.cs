@@ -25,7 +25,7 @@ namespace CSharpTcpDemo.com.dobot.api
         protected override void OnConnected(Socket sock)
         {
             sock.SendTimeout = 5000;
-            sock.ReceiveTimeout = 15000;
+            //sock.ReceiveTimeout = 15000;
 
             mThread = new Thread(OnRecvData);
             mThread.IsBackground = true;
