@@ -432,7 +432,7 @@ namespace CSharpTcpDemo
         private void btnSpeedConfirm_Click(object sender, EventArgs e)
         {
             int iValue = Parse2Int(this.textBoxSpeedRatio.Text);
-            PrintLog(string.Format("send to {0}:{1}: SpeedFactor({1})", mDashboard.IP, mDashboard.Port, iValue));
+            PrintLog(string.Format("send to {0}:{1}: SpeedFactor({2})", mDashboard.IP, mDashboard.Port, iValue));
             Thread thd = new Thread(() => {
                 string ret = mDashboard.SpeedFactor(iValue);
                 PrintLog(string.Format("Receive From {0}:{1}: {2}", mDashboard.IP, mDashboard.Port, ret));
