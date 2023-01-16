@@ -114,18 +114,27 @@ namespace CSharpTcpDemo.com.dobot.api
 
         public string GetErrorID()
         {
-            if (!IsConnected())
-            {
-                return "device does not connected!!!";
-            }
+            return ExecuteCommand("GetErrorID()");
+        }
 
-            string str = "GetErrorID()";
-            if (!SendData(str))
-            {
-                return str + ":send error";
-            }
+        public string RunScript(string scriptName)
+        {
+            return ExecuteCommand("RunScript(" + scriptName + ")");
+        }
 
-            return WaitReply(5000);
+        public string PauseScript()
+        {
+            return ExecuteCommand("PauseScript()");
+        }
+
+        public string ContinueScript()
+        {
+            return ExecuteCommand("ContinueScript()");
+        }
+
+        public string StopScript()
+        {
+            return ExecuteCommand("StopScript()");
         }
 
         private string ExecuteCommand(string str)

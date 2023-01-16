@@ -23,7 +23,7 @@ namespace CSharpTcpDemo.com.dobot.api
                     mControllerBeans.Add(bean.id, bean);
                 }
             }
-            catch (Exception ex)
+            catch (Exception /*ex*/)
             {
             }
         }
@@ -39,7 +39,7 @@ namespace CSharpTcpDemo.com.dobot.api
                     mServoBeans.Add(bean.id, bean);
                 }
             }
-            catch (Exception ex)
+            catch (Exception /*ex*/)
             {
             }
         }
