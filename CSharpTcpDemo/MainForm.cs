@@ -23,7 +23,8 @@ namespace CSharpTcpDemo
         {
             InitializeComponent();
 
-            this.textBoxIP.Text = "192.168.5.1";
+            //this.textBoxIP.Text = "192.168.5.1";
+            this.textBoxIP.Text = "127.0.0.1";
             this.textBoxDashboardPort.Text = "29999";
             this.textBoxMovePort.Text = "30003";
             this.textBoxFeedbackPort.Text = "30004";
@@ -630,6 +631,52 @@ namespace CSharpTcpDemo
                 PrintErrorInfo(strTime + "\r\n" + sb.ToString());
             }
             return;
+        }
+
+        private void ButtonRun_Click(object sender, EventArgs e)
+        {
+            bool bRun = this.ButtonRun.Text.Equals("Run");
+            string scriptName = TextBoxName.Text;
+
+            PrintLog(string.Format("send to {0}:{1}: {2}", mDashboard.IP, mDashboard.Port, bRun ? "RunScript(" + scriptName + ")" : "StopScript()"));
+            Thread thd = new Thread(() => {
+                string ret = bRun ? mDashboard.RunScript(scriptName) : mDashboard.StopScript();
+                bool bOk = ret.StartsWith("0");
+
+                this.ButtonRun.Invoke(new Action(() => {
+                    if (bOk)
+                    {
+                        this.ButtonRun.Text = bRun ? "Stop" : "Run";
+                        this.ButtonPause.Visible = bRun;
+                        this.ButtonPause.Text = "Pause";
+                    }
+                }));
+
+                PrintLog(string.Format("Receive From {0}:{1}: {2}", mDashboard.IP, mDashboard.Port, ret));
+            });
+            thd.Start();
+        }
+
+        private void ButtonPause_Click(object sender, EventArgs e)
+        {
+            bool bPaused = this.ButtonPause.Text.Equals("Continue");
+
+            PrintLog(string.Format("send to {0}:{1}: {2}()", mDashboard.IP, mDashboard.Port, bPaused ? "ContinueScript" : "PauseScript"));
+            Thread thd = new Thread(() => {
+                string ret = bPaused ? mDashboard.ContinueScript() : mDashboard.PauseScript();
+                bool bOk = ret.StartsWith("0");
+
+                this.ButtonPause.Invoke(new Action(() => {
+                    if (bOk)
+                    {
+                        bPaused = !bPaused;
+                        this.ButtonPause.Text = bPaused ? "Continue" : "Pause";
+                    }
+                }));
+
+                PrintLog(string.Format("Receive From {0}:{1}: {2}", mDashboard.IP, mDashboard.Port, ret));
+            });
+            thd.Start();
         }
     }
 }
