@@ -23,8 +23,7 @@ namespace CSharpTcpDemo
         {
             InitializeComponent();
 
-            //this.textBoxIP.Text = "192.168.5.1";
-            this.textBoxIP.Text = "127.0.0.1";
+            this.textBoxIP.Text = "192.168.5.1";
             this.textBoxDashboardPort.Text = "29999";
             this.textBoxMovePort.Text = "30003";
             this.textBoxFeedbackPort.Text = "30004";
