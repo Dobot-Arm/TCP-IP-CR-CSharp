@@ -140,6 +140,13 @@
             this.labCurrentSpeedRatio = new System.Windows.Forms.Label();
             this.richTextBoxLog = new System.Windows.Forms.RichTextBox();
             this.groupBoxLog = new System.Windows.Forms.GroupBox();
+            this.GroupBoxModbus = new System.Windows.Forms.GroupBox();
+            this.ButtonModbusClose = new System.Windows.Forms.Button();
+            this.LabelModbusIPAddress = new System.Windows.Forms.Label();
+            this.TextBoxModbusIP = new System.Windows.Forms.TextBox();
+            this.ButtonModbusCreate = new System.Windows.Forms.Button();
+            this.TextBoxModbusIndex = new System.Windows.Forms.TextBox();
+            this.LabelModbusIndex = new System.Windows.Forms.Label();
             this.groupBoxConnect.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.GroupBoxScript.SuspendLayout();
@@ -149,6 +156,7 @@
             this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBoxLog.SuspendLayout();
+            this.GroupBoxModbus.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -249,6 +257,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.GroupBoxModbus);
             this.groupBox2.Controls.Add(this.GroupBoxScript);
             this.groupBox2.Controls.Add(this.groupBox6);
             this.groupBox2.Controls.Add(this.groupBox5);
@@ -1276,6 +1285,77 @@
             this.groupBoxLog.TabStop = false;
             this.groupBoxLog.Text = "Log";
             // 
+            // GroupBoxModbus
+            // 
+            this.GroupBoxModbus.Controls.Add(this.LabelModbusIndex);
+            this.GroupBoxModbus.Controls.Add(this.TextBoxModbusIndex);
+            this.GroupBoxModbus.Controls.Add(this.ButtonModbusClose);
+            this.GroupBoxModbus.Controls.Add(this.LabelModbusIPAddress);
+            this.GroupBoxModbus.Controls.Add(this.TextBoxModbusIP);
+            this.GroupBoxModbus.Controls.Add(this.ButtonModbusCreate);
+            this.GroupBoxModbus.Location = new System.Drawing.Point(461, 13);
+            this.GroupBoxModbus.Margin = new System.Windows.Forms.Padding(2);
+            this.GroupBoxModbus.Name = "GroupBoxModbus";
+            this.GroupBoxModbus.Padding = new System.Windows.Forms.Padding(2);
+            this.GroupBoxModbus.Size = new System.Drawing.Size(445, 50);
+            this.GroupBoxModbus.TabIndex = 11;
+            this.GroupBoxModbus.TabStop = false;
+            this.GroupBoxModbus.Text = "Modbus";
+            // 
+            // ButtonModbusClose
+            // 
+            this.ButtonModbusClose.Location = new System.Drawing.Point(345, 16);
+            this.ButtonModbusClose.Name = "ButtonModbusClose";
+            this.ButtonModbusClose.Size = new System.Drawing.Size(75, 23);
+            this.ButtonModbusClose.TabIndex = 8;
+            this.ButtonModbusClose.Text = "Close";
+            this.ButtonModbusClose.UseVisualStyleBackColor = true;
+            this.ButtonModbusClose.Click += new System.EventHandler(this.ButtonModbusClose_Click);
+            // 
+            // LabelModbusIPAddress
+            // 
+            this.LabelModbusIPAddress.AutoSize = true;
+            this.LabelModbusIPAddress.Location = new System.Drawing.Point(8, 22);
+            this.LabelModbusIPAddress.Name = "LabelModbusIPAddress";
+            this.LabelModbusIPAddress.Size = new System.Drawing.Size(61, 13);
+            this.LabelModbusIPAddress.TabIndex = 4;
+            this.LabelModbusIPAddress.Text = "IP Address:";
+            this.LabelModbusIPAddress.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // TextBoxModbusIP
+            // 
+            this.TextBoxModbusIP.Location = new System.Drawing.Point(75, 18);
+            this.TextBoxModbusIP.Name = "TextBoxModbusIP";
+            this.TextBoxModbusIP.Size = new System.Drawing.Size(86, 20);
+            this.TextBoxModbusIP.TabIndex = 6;
+            // 
+            // ButtonModbusCreate
+            // 
+            this.ButtonModbusCreate.Location = new System.Drawing.Point(264, 16);
+            this.ButtonModbusCreate.Name = "ButtonModbusCreate";
+            this.ButtonModbusCreate.Size = new System.Drawing.Size(75, 23);
+            this.ButtonModbusCreate.TabIndex = 0;
+            this.ButtonModbusCreate.Text = "Create";
+            this.ButtonModbusCreate.UseVisualStyleBackColor = true;
+            this.ButtonModbusCreate.Click += new System.EventHandler(this.ButtonModbusCreate_Click);
+            // 
+            // TextBoxModbusIndex
+            // 
+            this.TextBoxModbusIndex.Location = new System.Drawing.Point(207, 18);
+            this.TextBoxModbusIndex.Name = "TextBoxModbusIndex";
+            this.TextBoxModbusIndex.Size = new System.Drawing.Size(51, 20);
+            this.TextBoxModbusIndex.TabIndex = 9;
+            // 
+            // LabelModbusIndex
+            // 
+            this.LabelModbusIndex.AutoSize = true;
+            this.LabelModbusIndex.Location = new System.Drawing.Point(167, 22);
+            this.LabelModbusIndex.Name = "LabelModbusIndex";
+            this.LabelModbusIndex.Size = new System.Drawing.Size(36, 13);
+            this.LabelModbusIndex.TabIndex = 10;
+            this.LabelModbusIndex.Text = "Index:";
+            this.LabelModbusIndex.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -1306,6 +1386,8 @@
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBoxLog.ResumeLayout(false);
+            this.GroupBoxModbus.ResumeLayout(false);
+            this.GroupBoxModbus.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1424,5 +1506,12 @@
         private System.Windows.Forms.Button ButtonRun;
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.Button ButtonPause;
+        private System.Windows.Forms.GroupBox GroupBoxModbus;
+        private System.Windows.Forms.Button ButtonModbusClose;
+        private System.Windows.Forms.Label LabelModbusIPAddress;
+        private System.Windows.Forms.TextBox TextBoxModbusIP;
+        private System.Windows.Forms.Button ButtonModbusCreate;
+        private System.Windows.Forms.Label LabelModbusIndex;
+        private System.Windows.Forms.TextBox TextBoxModbusIndex;
     }
 }

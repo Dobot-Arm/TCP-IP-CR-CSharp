@@ -137,6 +137,16 @@ namespace CSharpTcpDemo.com.dobot.api
             return ExecuteCommand("StopScript()");
         }
 
+        public string ModbusCreate(string ipAddress)
+        {
+            return ExecuteCommand($"ModbusCreate({ipAddress},60000,1)");
+        }
+
+        public string ModbusClose(string index)
+        {
+            return ExecuteCommand($"ModbusClose({index})");
+        }
+
         private string ExecuteCommand(string str)
         {
             if (!IsConnected())
