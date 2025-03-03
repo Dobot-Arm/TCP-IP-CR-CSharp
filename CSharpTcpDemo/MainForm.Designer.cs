@@ -39,6 +39,16 @@
             this.btnConnect = new System.Windows.Forms.Button();
             this.groupBoxConnect = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.GroupBoxScript = new System.Windows.Forms.GroupBox();
+            this.ButtonPause = new System.Windows.Forms.Button();
+            this.LabelName = new System.Windows.Forms.Label();
+            this.TextBoxName = new System.Windows.Forms.TextBox();
+            this.ButtonRun = new System.Windows.Forms.Button();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.textBoxSpeedRatio = new System.Windows.Forms.TextBox();
+            this.btnSpeedConfirm = new System.Windows.Forms.Button();
+            this.label6 = new System.Windows.Forms.Label();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.label22 = new System.Windows.Forms.Label();
             this.textBoxIdxIO = new System.Windows.Forms.TextBox();
@@ -53,13 +63,9 @@
             this.cboStatus = new System.Windows.Forms.ComboBox();
             this.btnDOInput = new System.Windows.Forms.Button();
             this.label21 = new System.Windows.Forms.Label();
-            this.textBoxSpeedRatio = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.btnSpeedConfirm = new System.Windows.Forms.Button();
             this.btnClearError = new System.Windows.Forms.Button();
             this.btnResetRobot = new System.Windows.Forms.Button();
             this.btnEnable = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.btnJointMovJ = new System.Windows.Forms.Button();
             this.btnMovL = new System.Windows.Forms.Button();
@@ -134,62 +140,72 @@
             this.labCurrentSpeedRatio = new System.Windows.Forms.Label();
             this.richTextBoxLog = new System.Windows.Forms.RichTextBox();
             this.groupBoxLog = new System.Windows.Forms.GroupBox();
+            this.GroupBoxModbus = new System.Windows.Forms.GroupBox();
+            this.ButtonModbusClose = new System.Windows.Forms.Button();
+            this.LabelModbusIPAddress = new System.Windows.Forms.Label();
+            this.TextBoxModbusIP = new System.Windows.Forms.TextBox();
+            this.ButtonModbusCreate = new System.Windows.Forms.Button();
+            this.TextBoxModbusIndex = new System.Windows.Forms.TextBox();
+            this.LabelModbusIndex = new System.Windows.Forms.Label();
             this.groupBoxConnect.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.GroupBoxScript.SuspendLayout();
+            this.groupBox6.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBoxLog.SuspendLayout();
+            this.GroupBoxModbus.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(16, 39);
+            this.label1.Location = new System.Drawing.Point(8, 22);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(71, 12);
+            this.label1.Size = new System.Drawing.Size(61, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "IP Address:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // textBoxIP
             // 
-            this.textBoxIP.Location = new System.Drawing.Point(93, 35);
+            this.textBoxIP.Location = new System.Drawing.Point(95, 18);
             this.textBoxIP.Name = "textBoxIP";
-            this.textBoxIP.Size = new System.Drawing.Size(131, 21);
+            this.textBoxIP.Size = new System.Drawing.Size(131, 20);
             this.textBoxIP.TabIndex = 1;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(246, 39);
+            this.label2.Location = new System.Drawing.Point(246, 22);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(95, 12);
+            this.label2.Size = new System.Drawing.Size(84, 13);
             this.label2.TabIndex = 2;
             this.label2.Text = "Dashboard Port:";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // textBoxDashboardPort
             // 
-            this.textBoxDashboardPort.Location = new System.Drawing.Point(346, 35);
+            this.textBoxDashboardPort.Location = new System.Drawing.Point(346, 18);
             this.textBoxDashboardPort.Name = "textBoxDashboardPort";
-            this.textBoxDashboardPort.Size = new System.Drawing.Size(55, 21);
+            this.textBoxDashboardPort.Size = new System.Drawing.Size(55, 20);
             this.textBoxDashboardPort.TabIndex = 3;
             // 
             // textBoxMovePort
             // 
-            this.textBoxMovePort.Location = new System.Drawing.Point(505, 35);
+            this.textBoxMovePort.Location = new System.Drawing.Point(505, 18);
             this.textBoxMovePort.Name = "textBoxMovePort";
-            this.textBoxMovePort.Size = new System.Drawing.Size(55, 21);
+            this.textBoxMovePort.Size = new System.Drawing.Size(55, 20);
             this.textBoxMovePort.TabIndex = 5;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(434, 39);
+            this.label3.Location = new System.Drawing.Point(434, 22);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(65, 12);
+            this.label3.Size = new System.Drawing.Size(59, 13);
             this.label3.TabIndex = 4;
             this.label3.Text = "Move Port:";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -197,25 +213,25 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(590, 39);
+            this.label4.Location = new System.Drawing.Point(590, 22);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(89, 12);
+            this.label4.Size = new System.Drawing.Size(80, 13);
             this.label4.TabIndex = 4;
             this.label4.Text = "Feedback Port:";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // textBoxFeedbackPort
             // 
-            this.textBoxFeedbackPort.Location = new System.Drawing.Point(686, 35);
+            this.textBoxFeedbackPort.Location = new System.Drawing.Point(686, 18);
             this.textBoxFeedbackPort.Name = "textBoxFeedbackPort";
-            this.textBoxFeedbackPort.Size = new System.Drawing.Size(55, 21);
+            this.textBoxFeedbackPort.Size = new System.Drawing.Size(55, 20);
             this.textBoxFeedbackPort.TabIndex = 5;
             // 
             // btnConnect
             // 
-            this.btnConnect.Location = new System.Drawing.Point(642, 70);
+            this.btnConnect.Location = new System.Drawing.Point(806, 16);
             this.btnConnect.Name = "btnConnect";
-            this.btnConnect.Size = new System.Drawing.Size(119, 23);
+            this.btnConnect.Size = new System.Drawing.Size(75, 23);
             this.btnConnect.TabIndex = 6;
             this.btnConnect.Text = "Connect";
             this.btnConnect.UseVisualStyleBackColor = true;
@@ -234,28 +250,131 @@
             this.groupBoxConnect.Controls.Add(this.label3);
             this.groupBoxConnect.Location = new System.Drawing.Point(12, 12);
             this.groupBoxConnect.Name = "groupBoxConnect";
-            this.groupBoxConnect.Size = new System.Drawing.Size(881, 102);
+            this.groupBoxConnect.Size = new System.Drawing.Size(915, 50);
             this.groupBoxConnect.TabIndex = 7;
             this.groupBoxConnect.TabStop = false;
             this.groupBoxConnect.Text = "Robot Connect";
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.GroupBoxModbus);
+            this.groupBox2.Controls.Add(this.GroupBoxScript);
+            this.groupBox2.Controls.Add(this.groupBox6);
             this.groupBox2.Controls.Add(this.groupBox5);
             this.groupBox2.Controls.Add(this.groupBox1);
-            this.groupBox2.Controls.Add(this.textBoxSpeedRatio);
-            this.groupBox2.Controls.Add(this.label6);
-            this.groupBox2.Controls.Add(this.btnSpeedConfirm);
             this.groupBox2.Controls.Add(this.btnClearError);
             this.groupBox2.Controls.Add(this.btnResetRobot);
             this.groupBox2.Controls.Add(this.btnEnable);
-            this.groupBox2.Controls.Add(this.label5);
-            this.groupBox2.Location = new System.Drawing.Point(12, 122);
+            this.groupBox2.Location = new System.Drawing.Point(12, 67);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(881, 126);
+            this.groupBox2.Size = new System.Drawing.Size(915, 187);
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Dashboard Function";
+            // 
+            // GroupBoxScript
+            // 
+            this.GroupBoxScript.Controls.Add(this.ButtonPause);
+            this.GroupBoxScript.Controls.Add(this.LabelName);
+            this.GroupBoxScript.Controls.Add(this.TextBoxName);
+            this.GroupBoxScript.Controls.Add(this.ButtonRun);
+            this.GroupBoxScript.Location = new System.Drawing.Point(461, 71);
+            this.GroupBoxScript.Margin = new System.Windows.Forms.Padding(2);
+            this.GroupBoxScript.Name = "GroupBoxScript";
+            this.GroupBoxScript.Padding = new System.Windows.Forms.Padding(2);
+            this.GroupBoxScript.Size = new System.Drawing.Size(445, 50);
+            this.GroupBoxScript.TabIndex = 10;
+            this.GroupBoxScript.TabStop = false;
+            this.GroupBoxScript.Text = "Script";
+            // 
+            // ButtonPause
+            // 
+            this.ButtonPause.Location = new System.Drawing.Point(345, 16);
+            this.ButtonPause.Name = "ButtonPause";
+            this.ButtonPause.Size = new System.Drawing.Size(75, 23);
+            this.ButtonPause.TabIndex = 8;
+            this.ButtonPause.Text = "Pause";
+            this.ButtonPause.UseVisualStyleBackColor = true;
+            this.ButtonPause.Visible = false;
+            this.ButtonPause.Click += new System.EventHandler(this.ButtonPause_Click);
+            // 
+            // LabelName
+            // 
+            this.LabelName.AutoSize = true;
+            this.LabelName.Location = new System.Drawing.Point(8, 22);
+            this.LabelName.Name = "LabelName";
+            this.LabelName.Size = new System.Drawing.Size(38, 13);
+            this.LabelName.TabIndex = 4;
+            this.LabelName.Text = "Name:";
+            this.LabelName.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // TextBoxName
+            // 
+            this.TextBoxName.Location = new System.Drawing.Point(57, 18);
+            this.TextBoxName.Name = "TextBoxName";
+            this.TextBoxName.Size = new System.Drawing.Size(200, 20);
+            this.TextBoxName.TabIndex = 6;
+            // 
+            // ButtonRun
+            // 
+            this.ButtonRun.Location = new System.Drawing.Point(264, 16);
+            this.ButtonRun.Name = "ButtonRun";
+            this.ButtonRun.Size = new System.Drawing.Size(75, 23);
+            this.ButtonRun.TabIndex = 0;
+            this.ButtonRun.Text = "Run";
+            this.ButtonRun.UseVisualStyleBackColor = true;
+            this.ButtonRun.Click += new System.EventHandler(this.ButtonRun_Click);
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.label5);
+            this.groupBox6.Controls.Add(this.textBoxSpeedRatio);
+            this.groupBox6.Controls.Add(this.btnSpeedConfirm);
+            this.groupBox6.Controls.Add(this.label6);
+            this.groupBox6.Location = new System.Drawing.Point(8, 71);
+            this.groupBox6.Margin = new System.Windows.Forms.Padding(2);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Padding = new System.Windows.Forms.Padding(2);
+            this.groupBox6.Size = new System.Drawing.Size(445, 50);
+            this.groupBox6.TabIndex = 9;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Speed";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(8, 22);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(69, 13);
+            this.label5.TabIndex = 4;
+            this.label5.Text = "Speed Ratio:";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // textBoxSpeedRatio
+            // 
+            this.textBoxSpeedRatio.Location = new System.Drawing.Point(160, 18);
+            this.textBoxSpeedRatio.Name = "textBoxSpeedRatio";
+            this.textBoxSpeedRatio.Size = new System.Drawing.Size(51, 20);
+            this.textBoxSpeedRatio.TabIndex = 6;
+            // 
+            // btnSpeedConfirm
+            // 
+            this.btnSpeedConfirm.Location = new System.Drawing.Point(345, 16);
+            this.btnSpeedConfirm.Name = "btnSpeedConfirm";
+            this.btnSpeedConfirm.Size = new System.Drawing.Size(75, 23);
+            this.btnSpeedConfirm.TabIndex = 0;
+            this.btnSpeedConfirm.Text = "Confirm";
+            this.btnSpeedConfirm.UseVisualStyleBackColor = true;
+            this.btnSpeedConfirm.Click += new System.EventHandler(this.btnSpeedConfirm_Click);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(215, 22);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(15, 13);
+            this.label6.TabIndex = 5;
+            this.label6.Text = "%";
             // 
             // groupBox5
             // 
@@ -265,21 +384,21 @@
             this.groupBox5.Controls.Add(this.cboStatusIO);
             this.groupBox5.Controls.Add(this.btnDOInputIO);
             this.groupBox5.Controls.Add(this.label24);
-            this.groupBox5.Location = new System.Drawing.Point(448, 63);
-            this.groupBox5.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox5.Location = new System.Drawing.Point(461, 129);
+            this.groupBox5.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.groupBox5.Size = new System.Drawing.Size(430, 50);
+            this.groupBox5.Padding = new System.Windows.Forms.Padding(2);
+            this.groupBox5.Size = new System.Drawing.Size(445, 50);
             this.groupBox5.TabIndex = 8;
             this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "末端IO";
+            this.groupBox5.Text = "End IO";
             // 
             // label22
             // 
             this.label22.AutoSize = true;
             this.label22.Location = new System.Drawing.Point(8, 22);
             this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(95, 12);
+            this.label22.Size = new System.Drawing.Size(76, 13);
             this.label22.TabIndex = 0;
             this.label22.Text = "DigitalOutputs:";
             this.label22.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -288,7 +407,7 @@
             // 
             this.textBoxIdxIO.Location = new System.Drawing.Point(160, 18);
             this.textBoxIdxIO.Name = "textBoxIdxIO";
-            this.textBoxIdxIO.Size = new System.Drawing.Size(51, 21);
+            this.textBoxIdxIO.Size = new System.Drawing.Size(51, 20);
             this.textBoxIdxIO.TabIndex = 1;
             // 
             // label23
@@ -296,7 +415,7 @@
             this.label23.AutoSize = true;
             this.label23.Location = new System.Drawing.Point(109, 22);
             this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(41, 12);
+            this.label23.Size = new System.Drawing.Size(36, 13);
             this.label23.TabIndex = 0;
             this.label23.Text = "Index:";
             this.label23.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -308,14 +427,14 @@
             this.cboStatusIO.Items.AddRange(new object[] {
             "On",
             "Off"});
-            this.cboStatusIO.Location = new System.Drawing.Point(274, 18);
+            this.cboStatusIO.Location = new System.Drawing.Point(274, 17);
             this.cboStatusIO.Name = "cboStatusIO";
-            this.cboStatusIO.Size = new System.Drawing.Size(58, 20);
+            this.cboStatusIO.Size = new System.Drawing.Size(58, 21);
             this.cboStatusIO.TabIndex = 3;
             // 
             // btnDOInputIO
             // 
-            this.btnDOInputIO.Location = new System.Drawing.Point(339, 16);
+            this.btnDOInputIO.Location = new System.Drawing.Point(345, 16);
             this.btnDOInputIO.Name = "btnDOInputIO";
             this.btnDOInputIO.Size = new System.Drawing.Size(75, 23);
             this.btnDOInputIO.TabIndex = 0;
@@ -328,7 +447,7 @@
             this.label24.AutoSize = true;
             this.label24.Location = new System.Drawing.Point(215, 22);
             this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(47, 12);
+            this.label24.Size = new System.Drawing.Size(40, 13);
             this.label24.TabIndex = 0;
             this.label24.Text = "Status:";
             this.label24.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -341,21 +460,21 @@
             this.groupBox1.Controls.Add(this.cboStatus);
             this.groupBox1.Controls.Add(this.btnDOInput);
             this.groupBox1.Controls.Add(this.label21);
-            this.groupBox1.Location = new System.Drawing.Point(8, 63);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Location = new System.Drawing.Point(8, 129);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.groupBox1.Size = new System.Drawing.Size(430, 50);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
+            this.groupBox1.Size = new System.Drawing.Size(445, 50);
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "控制器IO";
+            this.groupBox1.Text = "Controller IO";
             // 
             // label19
             // 
             this.label19.AutoSize = true;
             this.label19.Location = new System.Drawing.Point(8, 22);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(95, 12);
+            this.label19.Size = new System.Drawing.Size(76, 13);
             this.label19.TabIndex = 0;
             this.label19.Text = "DigitalOutputs:";
             this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -364,7 +483,7 @@
             // 
             this.textBoxIdx.Location = new System.Drawing.Point(160, 18);
             this.textBoxIdx.Name = "textBoxIdx";
-            this.textBoxIdx.Size = new System.Drawing.Size(51, 21);
+            this.textBoxIdx.Size = new System.Drawing.Size(51, 20);
             this.textBoxIdx.TabIndex = 1;
             // 
             // label20
@@ -372,7 +491,7 @@
             this.label20.AutoSize = true;
             this.label20.Location = new System.Drawing.Point(109, 22);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(41, 12);
+            this.label20.Size = new System.Drawing.Size(36, 13);
             this.label20.TabIndex = 0;
             this.label20.Text = "Index:";
             this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -384,14 +503,14 @@
             this.cboStatus.Items.AddRange(new object[] {
             "On",
             "Off"});
-            this.cboStatus.Location = new System.Drawing.Point(274, 18);
+            this.cboStatus.Location = new System.Drawing.Point(274, 17);
             this.cboStatus.Name = "cboStatus";
-            this.cboStatus.Size = new System.Drawing.Size(58, 20);
+            this.cboStatus.Size = new System.Drawing.Size(58, 21);
             this.cboStatus.TabIndex = 3;
             // 
             // btnDOInput
             // 
-            this.btnDOInput.Location = new System.Drawing.Point(339, 16);
+            this.btnDOInput.Location = new System.Drawing.Point(345, 16);
             this.btnDOInput.Name = "btnDOInput";
             this.btnDOInput.Size = new System.Drawing.Size(75, 23);
             this.btnDOInput.TabIndex = 0;
@@ -404,36 +523,10 @@
             this.label21.AutoSize = true;
             this.label21.Location = new System.Drawing.Point(215, 22);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(47, 12);
+            this.label21.Size = new System.Drawing.Size(40, 13);
             this.label21.TabIndex = 0;
             this.label21.Text = "Status:";
             this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // textBoxSpeedRatio
-            // 
-            this.textBoxSpeedRatio.Location = new System.Drawing.Point(534, 30);
-            this.textBoxSpeedRatio.Name = "textBoxSpeedRatio";
-            this.textBoxSpeedRatio.Size = new System.Drawing.Size(57, 21);
-            this.textBoxSpeedRatio.TabIndex = 6;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(597, 34);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(11, 12);
-            this.label6.TabIndex = 5;
-            this.label6.Text = "%";
-            // 
-            // btnSpeedConfirm
-            // 
-            this.btnSpeedConfirm.Location = new System.Drawing.Point(619, 29);
-            this.btnSpeedConfirm.Name = "btnSpeedConfirm";
-            this.btnSpeedConfirm.Size = new System.Drawing.Size(75, 23);
-            this.btnSpeedConfirm.TabIndex = 0;
-            this.btnSpeedConfirm.Text = "Confirm";
-            this.btnSpeedConfirm.UseVisualStyleBackColor = true;
-            this.btnSpeedConfirm.Click += new System.EventHandler(this.btnSpeedConfirm_Click);
             // 
             // btnClearError
             // 
@@ -465,16 +558,6 @@
             this.btnEnable.UseVisualStyleBackColor = true;
             this.btnEnable.Click += new System.EventHandler(this.btnEnable_Click);
             // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(451, 34);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(77, 12);
-            this.label5.TabIndex = 4;
-            this.label5.Text = "Speed Ratio:";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.btnJointMovJ);
@@ -504,9 +587,9 @@
             this.groupBox4.Controls.Add(this.label13);
             this.groupBox4.Controls.Add(this.label8);
             this.groupBox4.Controls.Add(this.label7);
-            this.groupBox4.Location = new System.Drawing.Point(12, 254);
+            this.groupBox4.Location = new System.Drawing.Point(12, 259);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(900, 91);
+            this.groupBox4.Size = new System.Drawing.Size(915, 91);
             this.groupBox4.TabIndex = 8;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Move Function";
@@ -545,84 +628,84 @@
             // 
             this.textBoxJ6.Location = new System.Drawing.Point(633, 62);
             this.textBoxJ6.Name = "textBoxJ6";
-            this.textBoxJ6.Size = new System.Drawing.Size(72, 21);
+            this.textBoxJ6.Size = new System.Drawing.Size(72, 20);
             this.textBoxJ6.TabIndex = 1;
             // 
             // textBoxRz
             // 
             this.textBoxRz.Location = new System.Drawing.Point(633, 25);
             this.textBoxRz.Name = "textBoxRz";
-            this.textBoxRz.Size = new System.Drawing.Size(72, 21);
+            this.textBoxRz.Size = new System.Drawing.Size(72, 20);
             this.textBoxRz.TabIndex = 1;
             // 
             // textBoxJ5
             // 
             this.textBoxJ5.Location = new System.Drawing.Point(510, 62);
             this.textBoxJ5.Name = "textBoxJ5";
-            this.textBoxJ5.Size = new System.Drawing.Size(72, 21);
+            this.textBoxJ5.Size = new System.Drawing.Size(72, 20);
             this.textBoxJ5.TabIndex = 1;
             // 
             // textBoxRy
             // 
             this.textBoxRy.Location = new System.Drawing.Point(510, 25);
             this.textBoxRy.Name = "textBoxRy";
-            this.textBoxRy.Size = new System.Drawing.Size(72, 21);
+            this.textBoxRy.Size = new System.Drawing.Size(72, 20);
             this.textBoxRy.TabIndex = 1;
             // 
             // textBoxJ4
             // 
             this.textBoxJ4.Location = new System.Drawing.Point(391, 62);
             this.textBoxJ4.Name = "textBoxJ4";
-            this.textBoxJ4.Size = new System.Drawing.Size(72, 21);
+            this.textBoxJ4.Size = new System.Drawing.Size(72, 20);
             this.textBoxJ4.TabIndex = 1;
             // 
             // textBoxRx
             // 
             this.textBoxRx.Location = new System.Drawing.Point(391, 25);
             this.textBoxRx.Name = "textBoxRx";
-            this.textBoxRx.Size = new System.Drawing.Size(72, 21);
+            this.textBoxRx.Size = new System.Drawing.Size(72, 20);
             this.textBoxRx.TabIndex = 1;
             // 
             // textBoxJ3
             // 
             this.textBoxJ3.Location = new System.Drawing.Point(276, 62);
             this.textBoxJ3.Name = "textBoxJ3";
-            this.textBoxJ3.Size = new System.Drawing.Size(72, 21);
+            this.textBoxJ3.Size = new System.Drawing.Size(72, 20);
             this.textBoxJ3.TabIndex = 1;
             // 
             // textBoxZ
             // 
             this.textBoxZ.Location = new System.Drawing.Point(276, 25);
             this.textBoxZ.Name = "textBoxZ";
-            this.textBoxZ.Size = new System.Drawing.Size(72, 21);
+            this.textBoxZ.Size = new System.Drawing.Size(72, 20);
             this.textBoxZ.TabIndex = 1;
             // 
             // textBoxJ2
             // 
             this.textBoxJ2.Location = new System.Drawing.Point(149, 62);
             this.textBoxJ2.Name = "textBoxJ2";
-            this.textBoxJ2.Size = new System.Drawing.Size(72, 21);
+            this.textBoxJ2.Size = new System.Drawing.Size(72, 20);
             this.textBoxJ2.TabIndex = 1;
             // 
             // textBoxY
             // 
             this.textBoxY.Location = new System.Drawing.Point(149, 25);
             this.textBoxY.Name = "textBoxY";
-            this.textBoxY.Size = new System.Drawing.Size(72, 21);
+            this.textBoxY.Size = new System.Drawing.Size(72, 20);
             this.textBoxY.TabIndex = 1;
             // 
             // textBoxJ1
             // 
-            this.textBoxJ1.Location = new System.Drawing.Point(35, 62);
+            this.textBoxJ1.Location = new System.Drawing.Point(31, 62);
             this.textBoxJ1.Name = "textBoxJ1";
-            this.textBoxJ1.Size = new System.Drawing.Size(72, 21);
+            this.textBoxJ1.Size = new System.Drawing.Size(72, 20);
             this.textBoxJ1.TabIndex = 1;
             // 
             // textBoxX
             // 
-            this.textBoxX.Location = new System.Drawing.Point(35, 25);
+            this.textBoxX.Location = new System.Drawing.Point(31, 25);
             this.textBoxX.Name = "textBoxX";
-            this.textBoxX.Size = new System.Drawing.Size(72, 21);
+            this.textBoxX.Size = new System.Drawing.Size(72, 20);
             this.textBoxX.TabIndex = 1;
             // 
             // label18
@@ -630,7 +713,7 @@
             this.label18.AutoSize = true;
             this.label18.Location = new System.Drawing.Point(610, 66);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(23, 12);
+            this.label18.Size = new System.Drawing.Size(21, 13);
             this.label18.TabIndex = 0;
             this.label18.Text = "J6:";
             this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -640,7 +723,7 @@
             this.label12.AutoSize = true;
             this.label12.Location = new System.Drawing.Point(610, 29);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(23, 12);
+            this.label12.Size = new System.Drawing.Size(23, 13);
             this.label12.TabIndex = 0;
             this.label12.Text = "Rz:";
             this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -650,7 +733,7 @@
             this.label17.AutoSize = true;
             this.label17.Location = new System.Drawing.Point(487, 66);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(23, 12);
+            this.label17.Size = new System.Drawing.Size(21, 13);
             this.label17.TabIndex = 0;
             this.label17.Text = "J5:";
             this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -660,7 +743,7 @@
             this.label11.AutoSize = true;
             this.label11.Location = new System.Drawing.Point(487, 29);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(23, 12);
+            this.label11.Size = new System.Drawing.Size(23, 13);
             this.label11.TabIndex = 0;
             this.label11.Text = "Ry:";
             this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -670,7 +753,7 @@
             this.label16.AutoSize = true;
             this.label16.Location = new System.Drawing.Point(368, 66);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(23, 12);
+            this.label16.Size = new System.Drawing.Size(21, 13);
             this.label16.TabIndex = 0;
             this.label16.Text = "J4:";
             this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -680,7 +763,7 @@
             this.label10.AutoSize = true;
             this.label10.Location = new System.Drawing.Point(368, 29);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(23, 12);
+            this.label10.Size = new System.Drawing.Size(23, 13);
             this.label10.TabIndex = 0;
             this.label10.Text = "Rx:";
             this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -690,7 +773,7 @@
             this.label15.AutoSize = true;
             this.label15.Location = new System.Drawing.Point(253, 66);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(23, 12);
+            this.label15.Size = new System.Drawing.Size(21, 13);
             this.label15.TabIndex = 0;
             this.label15.Text = "J3:";
             this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -700,7 +783,7 @@
             this.label9.AutoSize = true;
             this.label9.Location = new System.Drawing.Point(253, 29);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(17, 12);
+            this.label9.Size = new System.Drawing.Size(17, 13);
             this.label9.TabIndex = 0;
             this.label9.Text = "Z:";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -710,7 +793,7 @@
             this.label14.AutoSize = true;
             this.label14.Location = new System.Drawing.Point(126, 66);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(23, 12);
+            this.label14.Size = new System.Drawing.Size(21, 13);
             this.label14.TabIndex = 0;
             this.label14.Text = "J2:";
             this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -718,9 +801,9 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(12, 66);
+            this.label13.Location = new System.Drawing.Point(8, 66);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(23, 12);
+            this.label13.Size = new System.Drawing.Size(21, 13);
             this.label13.TabIndex = 0;
             this.label13.Text = "J1:";
             this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -730,7 +813,7 @@
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(126, 29);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(17, 12);
+            this.label8.Size = new System.Drawing.Size(17, 13);
             this.label8.TabIndex = 0;
             this.label8.Text = "Y:";
             this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -738,9 +821,9 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(12, 29);
+            this.label7.Location = new System.Drawing.Point(8, 29);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(17, 12);
+            this.label7.Size = new System.Drawing.Size(17, 13);
             this.label7.TabIndex = 0;
             this.label7.Text = "X:";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -790,7 +873,7 @@
             this.groupBox3.Controls.Add(this.labJ1);
             this.groupBox3.Controls.Add(this.labX);
             this.groupBox3.Controls.Add(this.labCurrentSpeedRatio);
-            this.groupBox3.Location = new System.Drawing.Point(13, 356);
+            this.groupBox3.Location = new System.Drawing.Point(12, 355);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(665, 311);
             this.groupBox3.TabIndex = 9;
@@ -799,7 +882,7 @@
             // 
             // btnClearErrorInfo
             // 
-            this.btnClearErrorInfo.Location = new System.Drawing.Point(591, 256);
+            this.btnClearErrorInfo.Location = new System.Drawing.Point(580, 256);
             this.btnClearErrorInfo.Name = "btnClearErrorInfo";
             this.btnClearErrorInfo.Size = new System.Drawing.Size(75, 23);
             this.btnClearErrorInfo.TabIndex = 4;
@@ -836,7 +919,7 @@
             // 
             // btnMinus6
             // 
-            this.btnMinus6.Location = new System.Drawing.Point(13, 224);
+            this.btnMinus6.Location = new System.Drawing.Point(8, 224);
             this.btnMinus6.Name = "btnMinus6";
             this.btnMinus6.Size = new System.Drawing.Size(57, 23);
             this.btnMinus6.TabIndex = 3;
@@ -872,7 +955,7 @@
             // 
             // btnMinus5
             // 
-            this.btnMinus5.Location = new System.Drawing.Point(13, 195);
+            this.btnMinus5.Location = new System.Drawing.Point(8, 195);
             this.btnMinus5.Name = "btnMinus5";
             this.btnMinus5.Size = new System.Drawing.Size(57, 23);
             this.btnMinus5.TabIndex = 3;
@@ -908,7 +991,7 @@
             // 
             // btnMinus4
             // 
-            this.btnMinus4.Location = new System.Drawing.Point(13, 166);
+            this.btnMinus4.Location = new System.Drawing.Point(8, 166);
             this.btnMinus4.Name = "btnMinus4";
             this.btnMinus4.Size = new System.Drawing.Size(57, 23);
             this.btnMinus4.TabIndex = 3;
@@ -944,7 +1027,7 @@
             // 
             // btnMinus3
             // 
-            this.btnMinus3.Location = new System.Drawing.Point(13, 137);
+            this.btnMinus3.Location = new System.Drawing.Point(8, 137);
             this.btnMinus3.Name = "btnMinus3";
             this.btnMinus3.Size = new System.Drawing.Size(57, 23);
             this.btnMinus3.TabIndex = 3;
@@ -980,7 +1063,7 @@
             // 
             // btnMinus2
             // 
-            this.btnMinus2.Location = new System.Drawing.Point(13, 108);
+            this.btnMinus2.Location = new System.Drawing.Point(8, 108);
             this.btnMinus2.Name = "btnMinus2";
             this.btnMinus2.Size = new System.Drawing.Size(57, 23);
             this.btnMinus2.TabIndex = 3;
@@ -1016,7 +1099,7 @@
             // 
             // btnMinus1
             // 
-            this.btnMinus1.Location = new System.Drawing.Point(13, 79);
+            this.btnMinus1.Location = new System.Drawing.Point(8, 79);
             this.btnMinus1.Name = "btnMinus1";
             this.btnMinus1.Size = new System.Drawing.Size(57, 23);
             this.btnMinus1.TabIndex = 3;
@@ -1036,34 +1119,34 @@
             this.label26.AutoSize = true;
             this.label26.Location = new System.Drawing.Point(452, 12);
             this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(65, 12);
+            this.label26.Size = new System.Drawing.Size(50, 13);
             this.label26.TabIndex = 1;
             this.label26.Text = "Error Info";
             // 
             // labDO
             // 
             this.labDO.AutoSize = true;
-            this.labDO.Location = new System.Drawing.Point(11, 281);
+            this.labDO.Location = new System.Drawing.Point(8, 281);
             this.labDO.Name = "labDO";
-            this.labDO.Size = new System.Drawing.Size(101, 12);
+            this.labDO.Size = new System.Drawing.Size(79, 13);
             this.labDO.TabIndex = 0;
             this.labDO.Text = "Digital Outputs:";
             // 
             // labDI
             // 
             this.labDI.AutoSize = true;
-            this.labDI.Location = new System.Drawing.Point(11, 256);
+            this.labDI.Location = new System.Drawing.Point(8, 256);
             this.labDI.Name = "labDI";
-            this.labDI.Size = new System.Drawing.Size(95, 12);
+            this.labDI.Size = new System.Drawing.Size(71, 13);
             this.labDI.TabIndex = 0;
             this.labDI.Text = "Digital Inputs:";
             // 
             // labRobotMode
             // 
             this.labRobotMode.AutoSize = true;
-            this.labRobotMode.Location = new System.Drawing.Point(15, 52);
+            this.labRobotMode.Location = new System.Drawing.Point(8, 52);
             this.labRobotMode.Name = "labRobotMode";
-            this.labRobotMode.Size = new System.Drawing.Size(71, 12);
+            this.labRobotMode.Size = new System.Drawing.Size(69, 13);
             this.labRobotMode.TabIndex = 0;
             this.labRobotMode.Text = "Robot Mode:";
             // 
@@ -1178,9 +1261,9 @@
             // labCurrentSpeedRatio
             // 
             this.labCurrentSpeedRatio.AutoSize = true;
-            this.labCurrentSpeedRatio.Location = new System.Drawing.Point(15, 27);
+            this.labCurrentSpeedRatio.Location = new System.Drawing.Point(8, 27);
             this.labCurrentSpeedRatio.Name = "labCurrentSpeedRatio";
-            this.labCurrentSpeedRatio.Size = new System.Drawing.Size(125, 12);
+            this.labCurrentSpeedRatio.Size = new System.Drawing.Size(106, 13);
             this.labCurrentSpeedRatio.TabIndex = 0;
             this.labCurrentSpeedRatio.Text = "Current Speed Ratio:";
             // 
@@ -1195,12 +1278,83 @@
             // groupBoxLog
             // 
             this.groupBoxLog.Controls.Add(this.richTextBoxLog);
-            this.groupBoxLog.Location = new System.Drawing.Point(684, 356);
+            this.groupBoxLog.Location = new System.Drawing.Point(684, 355);
             this.groupBoxLog.Name = "groupBoxLog";
             this.groupBoxLog.Size = new System.Drawing.Size(243, 311);
             this.groupBoxLog.TabIndex = 10;
             this.groupBoxLog.TabStop = false;
             this.groupBoxLog.Text = "Log";
+            // 
+            // GroupBoxModbus
+            // 
+            this.GroupBoxModbus.Controls.Add(this.LabelModbusIndex);
+            this.GroupBoxModbus.Controls.Add(this.TextBoxModbusIndex);
+            this.GroupBoxModbus.Controls.Add(this.ButtonModbusClose);
+            this.GroupBoxModbus.Controls.Add(this.LabelModbusIPAddress);
+            this.GroupBoxModbus.Controls.Add(this.TextBoxModbusIP);
+            this.GroupBoxModbus.Controls.Add(this.ButtonModbusCreate);
+            this.GroupBoxModbus.Location = new System.Drawing.Point(461, 13);
+            this.GroupBoxModbus.Margin = new System.Windows.Forms.Padding(2);
+            this.GroupBoxModbus.Name = "GroupBoxModbus";
+            this.GroupBoxModbus.Padding = new System.Windows.Forms.Padding(2);
+            this.GroupBoxModbus.Size = new System.Drawing.Size(445, 50);
+            this.GroupBoxModbus.TabIndex = 11;
+            this.GroupBoxModbus.TabStop = false;
+            this.GroupBoxModbus.Text = "Modbus";
+            // 
+            // ButtonModbusClose
+            // 
+            this.ButtonModbusClose.Location = new System.Drawing.Point(345, 16);
+            this.ButtonModbusClose.Name = "ButtonModbusClose";
+            this.ButtonModbusClose.Size = new System.Drawing.Size(75, 23);
+            this.ButtonModbusClose.TabIndex = 8;
+            this.ButtonModbusClose.Text = "Close";
+            this.ButtonModbusClose.UseVisualStyleBackColor = true;
+            this.ButtonModbusClose.Click += new System.EventHandler(this.ButtonModbusClose_Click);
+            // 
+            // LabelModbusIPAddress
+            // 
+            this.LabelModbusIPAddress.AutoSize = true;
+            this.LabelModbusIPAddress.Location = new System.Drawing.Point(8, 22);
+            this.LabelModbusIPAddress.Name = "LabelModbusIPAddress";
+            this.LabelModbusIPAddress.Size = new System.Drawing.Size(61, 13);
+            this.LabelModbusIPAddress.TabIndex = 4;
+            this.LabelModbusIPAddress.Text = "IP Address:";
+            this.LabelModbusIPAddress.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // TextBoxModbusIP
+            // 
+            this.TextBoxModbusIP.Location = new System.Drawing.Point(75, 18);
+            this.TextBoxModbusIP.Name = "TextBoxModbusIP";
+            this.TextBoxModbusIP.Size = new System.Drawing.Size(86, 20);
+            this.TextBoxModbusIP.TabIndex = 6;
+            // 
+            // ButtonModbusCreate
+            // 
+            this.ButtonModbusCreate.Location = new System.Drawing.Point(264, 16);
+            this.ButtonModbusCreate.Name = "ButtonModbusCreate";
+            this.ButtonModbusCreate.Size = new System.Drawing.Size(75, 23);
+            this.ButtonModbusCreate.TabIndex = 0;
+            this.ButtonModbusCreate.Text = "Create";
+            this.ButtonModbusCreate.UseVisualStyleBackColor = true;
+            this.ButtonModbusCreate.Click += new System.EventHandler(this.ButtonModbusCreate_Click);
+            // 
+            // TextBoxModbusIndex
+            // 
+            this.TextBoxModbusIndex.Location = new System.Drawing.Point(207, 18);
+            this.TextBoxModbusIndex.Name = "TextBoxModbusIndex";
+            this.TextBoxModbusIndex.Size = new System.Drawing.Size(51, 20);
+            this.TextBoxModbusIndex.TabIndex = 9;
+            // 
+            // LabelModbusIndex
+            // 
+            this.LabelModbusIndex.AutoSize = true;
+            this.LabelModbusIndex.Location = new System.Drawing.Point(167, 22);
+            this.LabelModbusIndex.Name = "LabelModbusIndex";
+            this.LabelModbusIndex.Size = new System.Drawing.Size(36, 13);
+            this.LabelModbusIndex.TabIndex = 10;
+            this.LabelModbusIndex.Text = "Index:";
+            this.LabelModbusIndex.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // MainForm
             // 
@@ -1219,7 +1373,10 @@
             this.groupBoxConnect.ResumeLayout(false);
             this.groupBoxConnect.PerformLayout();
             this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
+            this.GroupBoxScript.ResumeLayout(false);
+            this.GroupBoxScript.PerformLayout();
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -1229,6 +1386,8 @@
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBoxLog.ResumeLayout(false);
+            this.GroupBoxModbus.ResumeLayout(false);
+            this.GroupBoxModbus.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1341,5 +1500,18 @@
         private System.Windows.Forms.ComboBox cboStatusIO;
         private System.Windows.Forms.Button btnDOInputIO;
         private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.GroupBox GroupBoxScript;
+        private System.Windows.Forms.Label LabelName;
+        private System.Windows.Forms.TextBox TextBoxName;
+        private System.Windows.Forms.Button ButtonRun;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.Button ButtonPause;
+        private System.Windows.Forms.GroupBox GroupBoxModbus;
+        private System.Windows.Forms.Button ButtonModbusClose;
+        private System.Windows.Forms.Label LabelModbusIPAddress;
+        private System.Windows.Forms.TextBox TextBoxModbusIP;
+        private System.Windows.Forms.Button ButtonModbusCreate;
+        private System.Windows.Forms.Label LabelModbusIndex;
+        private System.Windows.Forms.TextBox TextBoxModbusIndex;
     }
 }

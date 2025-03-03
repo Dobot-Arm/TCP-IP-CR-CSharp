@@ -117,7 +117,32 @@ namespace CSharpTcpDemo
             box.Focus();
             box.Select(box.TextLength, 0);
             box.ScrollToCaret();
+
+            if (str.Contains(",ModbusCreate("))
+            {
+                ParseModbusIndex(str);
         }
+            else if (str.Contains(",ModbusClose("))
+            {
+                ClearModbusIndex();
+            }
+        }
+
+        private void ClearModbusIndex()
+        {
+            TextBoxModbusIndex.Text = "";
+        }
+
+        private void ParseModbusIndex(string str)
+        {
+            string [] parts = str.Split("{}".ToCharArray());
+
+            if (parts.Length > 2)
+            {
+                TextBoxModbusIndex.Text = parts[1];
+            }
+        }
+
         private void PrintLog(string str)
         {
             if (string.IsNullOrEmpty(str))
@@ -432,7 +457,7 @@ namespace CSharpTcpDemo
         private void btnSpeedConfirm_Click(object sender, EventArgs e)
         {
             int iValue = Parse2Int(this.textBoxSpeedRatio.Text);
-            PrintLog(string.Format("send to {0}:{1}: SpeedFactor({1})", mDashboard.IP, mDashboard.Port, iValue));
+            PrintLog(string.Format("send to {0}:{1}: SpeedFactor({2})", mDashboard.IP, mDashboard.Port, iValue));
             Thread thd = new Thread(() => {
                 string ret = mDashboard.SpeedFactor(iValue);
                 PrintLog(string.Format("Receive From {0}:{1}: {2}", mDashboard.IP, mDashboard.Port, ret));
@@ -630,6 +655,88 @@ namespace CSharpTcpDemo
                 PrintErrorInfo(strTime + "\r\n" + sb.ToString());
             }
             return;
+        }
+
+        private void ButtonRun_Click(object sender, EventArgs e)
+        {
+            bool bRun = this.ButtonRun.Text.Equals("Run");
+            string scriptName = TextBoxName.Text;
+
+            PrintLog(string.Format("send to {0}:{1}: {2}", mDashboard.IP, mDashboard.Port, bRun ? "RunScript(" + scriptName + ")" : "StopScript()"));
+            Thread thd = new Thread(() => {
+                string ret = bRun ? mDashboard.RunScript(scriptName) : mDashboard.StopScript();
+                bool bOk = ret.StartsWith("0");
+
+                this.ButtonRun.Invoke(new Action(() => {
+                    if (bOk)
+                    {
+                        this.ButtonRun.Text = bRun ? "Stop" : "Run";
+                        this.ButtonPause.Visible = bRun;
+                        this.ButtonPause.Text = "Pause";
+                    }
+                }));
+
+                PrintLog(string.Format("Receive From {0}:{1}: {2}", mDashboard.IP, mDashboard.Port, ret));
+            });
+            thd.Start();
+        }
+
+        private void ButtonPause_Click(object sender, EventArgs e)
+        {
+            bool bPaused = this.ButtonPause.Text.Equals("Continue");
+
+            PrintLog(string.Format("send to {0}:{1}: {2}()", mDashboard.IP, mDashboard.Port, bPaused ? "ContinueScript" : "PauseScript"));
+            Thread thd = new Thread(() => {
+                string ret = bPaused ? mDashboard.ContinueScript() : mDashboard.PauseScript();
+                bool bOk = ret.StartsWith("0");
+
+                this.ButtonPause.Invoke(new Action(() => {
+                    if (bOk)
+                    {
+                        bPaused = !bPaused;
+                        this.ButtonPause.Text = bPaused ? "Continue" : "Pause";
+                    }
+                }));
+
+                PrintLog(string.Format("Receive From {0}:{1}: {2}", mDashboard.IP, mDashboard.Port, ret));
+            });
+            thd.Start();
+        }
+
+        private void ButtonModbusCreate_Click(object sender, EventArgs e)
+        {
+            string ip = TextBoxModbusIP.Text;
+
+            if (IsValidIP(ip))
+            {
+                PrintLog($"send to {mDashboard.IP}:{mDashboard.Port}: ModbusCreate({ip},60000,1)");
+                Thread thd = new Thread(() => {
+                    string ret = mDashboard.ModbusCreate(ip);
+                    PrintLog($"Receive From {mDashboard.IP}:{mDashboard.Port}: {ret}");
+                });
+                thd.Start();
+            }
+            else
+            {
+                PrintLog($"Enter a valid IP to create the Modbus server.  This is not a valid IP address:  {ip}");
+            }
+        }
+
+        private void ButtonModbusClose_Click(object sender, EventArgs e)
+        {
+            if (int.TryParse(TextBoxModbusIndex.Text, out int index))
+            {
+                PrintLog($"send to {mDashboard.IP}:{mDashboard.Port}: ModbusClose({index})");
+                Thread thd = new Thread(() => {
+                    string ret = mDashboard.ModbusClose($"{index}");
+                    PrintLog($"Receive From {mDashboard.IP}:{mDashboard.Port}: {ret}");
+                });
+                thd.Start();
+            }
+            else
+            {
+                PrintLog($"Enter a valid index to close the Modbus server.");
+            }
         }
     }
 }

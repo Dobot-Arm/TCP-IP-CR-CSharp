@@ -18,207 +18,142 @@ namespace CSharpTcpDemo.com.dobot.api
         }
 
         /// <summary>
-        /// 复位，用于清除错误
+        /// 复位，用于清除错误 "Reset to clear errors"
         /// </summary>
-        /// <returns>返回执行结果的描述信息</returns>
+        /// <returns>返回执行结果的描述信息 "Returns a description of the execution result"</returns>
         public string ClearError()
         {
-            if (!IsConnected())
-            {
-                return "device does not connected!!!";
-            }
-
-            string str = "ClearError()";
-            if (!SendData(str))
-            {
-                return str + ":send error";
-            }
-
-            return WaitReply(5000);
+            return ExecuteCommand("ClearError()");
         }
 
         /// <summary>
-        /// 机器人上电
+        /// 机器人上电 "The robot is powered on"
         /// </summary>
-        /// <returns>返回执行结果的描述信息</returns>
+        /// <returns>返回执行结果的描述信息 "Returns a description of the execution result"</returns>
         public string PowerOn()
         {
-            if (!IsConnected())
-            {
-                return "device does not connected!!!";
-            }
-
-            string str = "PowerOn()";
-            if (!SendData(str))
-            {
-                return str + ":send error";
-            }
-
-            return WaitReply(15000);
+            return ExecuteCommand("PowerOn()");
         }
 
         /// <summary>
-        /// 急停
+        /// 急停 "Emergency stop"
         /// </summary>
-        /// <returns>返回执行结果的描述信息</returns>
+        /// <returns>返回执行结果的描述信息 "Returns a description of the execution result"</returns>
         public string PowerOff()
         {
             return EmergencyStop();
         }
 
         /// <summary>
-        /// 急停
+        /// 急停 "Emergency stop"
         /// </summary>
-        /// <returns>返回执行结果的描述信息</returns>
+        /// <returns>返回执行结果的描述信息 "Returns a description of the execution result"</returns>
         public string EmergencyStop()
         {
-            if (!IsConnected())
-            {
-                return "device does not connected!!!";
-            }
-
-            string str = "EmergencyStop()";
-            if (!SendData(str))
-            {
-                return str + ":send error";
-            }
-
-            return WaitReply(15000);
+            return ExecuteCommand("EmergencyStop()");
         }
 
         /// <summary>
-        /// 使能机器人
+        /// 使能机器人 "Enable the robot"
         /// </summary>
-        /// <returns>返回执行结果的描述信息</returns>
+        /// <returns>返回执行结果的描述信息 "Returns a description of the execution result"</returns>
         public string EnableRobot()
         {
-            if (!IsConnected())
-            {
-                return "device does not connected!!!";
-            }
-
-            string str = "EnableRobot()";
-            if (!SendData(str))
-            {
-                return str + ":send error";
-            }
-
-            return WaitReply(20000);
+            return ExecuteCommand("EnableRobot()");
         }
 
         /// <summary>
-        /// 下使能机器人
+        /// 下使能机器人 "Under enable the robot"
         /// </summary>
-        /// <returns>返回执行结果的描述信息</returns>
+        /// <returns>返回执行结果的描述信息 "Returns a description of the execution result"</returns>
         public string DisableRobot()
         {
-            if (!IsConnected())
-            {
-                return "device does not connected!!!";
-            }
-
-            string str = "DisableRobot()";
-            if (!SendData(str))
-            {
-                return str + ":send error";
-            }
-
-            return WaitReply(20000);
+            return ExecuteCommand("DisableRobot()");
         }
 
         /// <summary>
-        /// 机器人停止
+        /// 机器人停止 "The robot stops"
         /// </summary>
-        /// <returns>返回执行结果的描述信息</returns>
+        /// <returns>返回执行结果的描述信息 "Returns a description of the execution result"</returns>
         public string ResetRobot()
         {
-            if (!IsConnected())
-            {
-                return "device does not connected!!!";
-            }
-
-            string str = "ResetRobot()";
-            if (!SendData(str))
-            {
-                return str + ":send error";
-            }
-
-            return WaitReply(20000);
+            return ExecuteCommand("ResetRobot()");
         }
 
         /// <summary>
-        /// 设置全局速度比例。
+        /// 设置全局速度比例。 "Set the global speed scale."
         /// </summary>
-        /// <param name="ratio">运动速度比例，取值范围：1~100</param>
-        /// <returns>返回执行结果的描述信息</returns>
+        /// <param name="ratio">运动速度比例，取值范围 "Motion speed ratio, value range"：1~100</param>
+        /// <returns>返回执行结果的描述信息 "Returns a description of the execution result"</returns>
         public string SpeedFactor(int ratio)
         {
-            if (!IsConnected())
-            {
-                return "device does not connected!!!";
-            }
-
-            string str = String.Format("SpeedFactor({0})", ratio);
-            if (!SendData(str))
-            {
-                return str + ":send error";
-            }
-
-            return WaitReply(5000);
+            return ExecuteCommand(String.Format("SpeedFactor({0})", ratio));
         }
 
         /// <summary>
-        /// 设置数字输出端口状态（队列指令）
+        /// 设置数字输出端口状态（队列指令） "Setting Digital Output Port Status (Queue Instruction)"
         /// </summary>
-        /// <param name="index">数字输出索引，取值范围：1~16或100~1000</param>
-        /// <param name="status">数字输出端口状态，true：高电平；false：低电平</param>
-        /// <returns>返回执行结果的描述信息</returns>
+        /// <param name="index">数字输出索引，取值范围 "Digital output index, value range"：1~16或 "or" 100~1000</param>
+        /// <param name="status">数字输出端口状态 "Digital output port status"，true：高电平 "High level"；false：低电平 "Low level"</param>
+        /// <returns>返回执行结果的描述信息 "Returns a description of the execution result"</returns>
         public string DigitalOutputs(int index, bool status)
         {
-            if (!IsConnected())
-            {
-                return "device does not connected!!!";
-            }
-
-            string str = String.Format("DO({0},{1})", index, status ? 1 : 0);
-            if (!SendData(str))
-            {
-                return str + ":send error";
-            }
-
-            return WaitReply(5000);
+            return ExecuteCommand(String.Format("DO({0},{1})", index, status ? 1 : 0));
         }
 
         /// <summary>
-        /// 设置末端数字输出端口状态（队列指令）
+        /// 设置末端数字输出端口状态（队列指令） "Set End Digital Output Port Status (Queue Instruction)"
         /// </summary>
-        /// <param name="index">数字输出索引</param>
-        /// <param name="status">数字输出端口状态，true：高电平；false：低电平</param>
-        /// <returns>返回执行结果的描述信息</returns>
+        /// <param name="index">数字输出索引 "Digital output index"</param>
+        /// <param name="status">数字输出端口状态 "Digital output port status"，true：高电平 "High level"；false：低电平 "Low level"</param>
+        /// <returns>返回执行结果的描述信息 "Returns a description of the execution result"</returns>
         public string ToolDO(int index, bool status)
         {
-            if (!IsConnected())
-            {
-                return "device does not connected!!!";
-            }
-
-            string str = String.Format("ToolDO({0},{1})", index, status ? 1 : 0);
-            if (!SendData(str))
-            {
-                return str + ":send error";
-            }
-
-            return WaitReply(5000);
+            return ExecuteCommand(String.Format("ToolDO({0},{1})", index, status ? 1 : 0));
         }
 
         public string GetErrorID()
         {
+            return ExecuteCommand("GetErrorID()");
+        }
+
+        public string RunScript(string scriptName)
+        {
+            return ExecuteCommand("RunScript(" + scriptName + ")");
+        }
+
+        public string PauseScript()
+        {
+            return ExecuteCommand("PauseScript()");
+        }
+
+        public string ContinueScript()
+        {
+            return ExecuteCommand("ContinueScript()");
+        }
+
+        public string StopScript()
+        {
+            return ExecuteCommand("StopScript()");
+        }
+
+        public string ModbusCreate(string ipAddress)
+        {
+            return ExecuteCommand($"ModbusCreate({ipAddress},60000,1)");
+        }
+
+        public string ModbusClose(string index)
+        {
+            return ExecuteCommand($"ModbusClose({index})");
+        }
+
+        private string ExecuteCommand(string str)
+        {
             if (!IsConnected())
             {
-                return "device does not connected!!!";
+                return "Device is not connected!!!";
             }
 
-            string str = "GetErrorID()";
             if (!SendData(str))
             {
                 return str + ":send error";
